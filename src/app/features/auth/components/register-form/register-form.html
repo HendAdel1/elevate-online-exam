@@ -1,0 +1,114 @@
+<form class="space-y-6 font-geist">
+
+  <!-- First name & Last name -->
+  <div class="flex gap-4">
+
+    <!-- First name -->
+    <div class="flex-1">
+      <label class="block text-base font-medium text-gray-800 mb-2">
+        First name
+      </label>
+
+      <input type="text" placeholder="Hend"
+        class="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-blue-600 placeholder:text-gray-300" />
+    </div>
+
+    <!-- Last name -->
+    <div class="flex-1">
+      <label class="block text-base font-medium text-gray-800 mb-2">
+        Last name
+      </label>
+
+      <input type="text" placeholder="Adel"
+        class="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-blue-600 placeholder:text-gray-300" />
+    </div>
+
+  </div>
+
+  <!-- Username -->
+  <div>
+    <label class="block text-base font-medium text-gray-800 mb-2">
+      Username
+    </label>
+
+    <input type="text" placeholder="user123"
+      class="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-blue-600 placeholder:text-gray-300" />
+  </div>
+
+  <!-- Email -->
+  <div>
+    <label class="block text-base font-medium text-gray-800 mb-2">
+      Email
+    </label>
+
+    <input type="email" placeholder="user@example.com"
+      class="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-blue-600 placeholder:text-gray-300" />
+  </div>
+
+  <!-- Phone -->
+  <div>
+    <label class="block text-base font-medium text-gray-800 mb-2">
+      Phone
+    </label>
+
+    <div class="flex">
+
+      <!-- Country flags -->
+      <div class="flex items-center border border-gray-300 border-r-0 bg-gray-50 text-gray-700 text-base">
+        <select class="appearance-none px-2 py-3 bg-gray-50 focus:outline-none">
+          <option value="EG">EG (+20)</option>
+          <option value="US">US +1</option>
+          <option value="GB">GB +44</option>
+          <option value="FR">FR +33</option>
+        </select>
+      </div>
+
+      <input type="tel" placeholder="1012345678"
+        class="flex-1 border border-gray-300 px-4 py-3 focus:outline-none focus:border-blue-600 placeholder:text-gray-300" />
+    </div>
+  </div>
+
+
+
+  <!-- Password -->
+  <div>
+    <label class="block text-base font-medium text-gray-800 mb-2">
+      Password
+    </label>
+
+    <div class="relative">
+      <input type="password" placeholder="********"
+        class="w-full border border-gray-300 px-4 py-3 pr-10 focus:outline-none focus:border-blue-600 placeholder:text-gray-300" />
+
+      <span class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer">
+        <i-lucide name="eye-off" [size]="18" class="text-gray-300"></i-lucide>
+      </span>
+    </div>
+  </div>
+
+  <!-- Confirm Password -->
+  <div>
+    <label class="block text-base font-medium text-gray-800 mb-2">
+      Confirm Password
+    </label>
+
+    <div class="relative">
+      <input type="password" placeholder="********"
+        class="w-full border border-gray-300 px-4 py-3 pr-10 focus:outline-none focus:border-blue-600 placeholder:text-gray-300" />
+
+      <span class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer">
+        <i-lucide name="eye-off" [size]="18" class="text-gray-300"></i-lucide>
+      </span>
+    </div>
+  </div>
+
+  <!-- Button -->
+  <app-auth-button>Create Account</app-auth-button>
+
+  <!-- Link -->
+  <app-auth-link>
+    <span text>Already have an account? </span>
+    <span link routerLink="/auth/login">Login</span>
+  </app-auth-link>
+
+</form>

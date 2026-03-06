@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { AuthTitle } from '../../../../shared/ui/auth-title/auth-title';
 import { LoginForm } from "../../components/login-form/login-form";
 
 @Component({
   selector: 'app-login',
-  imports: [LoginForm],
+  imports: [AuthTitle, LoginForm],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
