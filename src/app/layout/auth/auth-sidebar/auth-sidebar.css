@@ -1,0 +1,15 @@
+.auth-sidebar {
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-sidebar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+  background:
+    radial-gradient(circle at 90% 35%, #50A2FF 90px, transparent 290px),
+    radial-gradient(circle at 25% 95%, #50A2FF 100px, transparent 260px);
+
+}
