@@ -1,13 +1,15 @@
 <div class="min-h-screen flex flex-col lg:flex-row">
 
   <!-- Sidebar -->
-  <app-auth-sidebar
-    class="hidden lg:flex lg:w-1/2 bg-blue-100/75 backdrop-blur-sm">
-  </app-auth-sidebar>
+  <div class="hidden lg:flex flex-1">
+    <app-auth-sidebar class="w-full"></app-auth-sidebar>
+  </div>
 
   <!-- Content -->
-  <div class="flex-1 flex items-center justify-center px-6 py-10 bg-gray-50">
-    <router-outlet></router-outlet>
+  <div class="flex-1 flex items-center justify-center">
+    <div class="w-full max-w-lg px-6">
+      <router-outlet></router-outlet>
+    </div>
   </div>
 
 </div>

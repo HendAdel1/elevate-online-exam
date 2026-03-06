@@ -1,1 +1,7 @@
-<p>auth-link works!</p>
+<p class="text-center text-sm text-gray-500">
+  <ng-content select="[text]"></ng-content>
+  
+  <a class="text-blue-600 hover:underline font-medium cursor-pointer">
+    <ng-content select="[link]"></ng-content>
+  </a>
+</p>
