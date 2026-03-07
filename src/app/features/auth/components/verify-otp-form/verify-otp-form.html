@@ -1,0 +1,20 @@
+<div class="font-geist font-base">
+  <div class="mb-10">
+    <p class="max-w-lg text-gray-500 mt-4">
+      Please enter the 6-digits code we have sent to:
+    </p>
+    <span class="text-gray-800">user@example.com. </span>
+    <a class="text-blue-600 font-medium cursor-pointer underline" routerLink="/auth/register"
+      [queryParams]="{ focus: 'email' }">
+      Edit
+    </a>
+  </div>
+
+  <p class="font-sm text-gray-500 font-medium text-center">You can request another code in: 60s</p>
+  <form class="space-y-6 font-geist mt-10">
+
+    <!-- Button -->
+    <app-auth-button>Verify Code</app-auth-button>
+
+  </form>
+</div>
