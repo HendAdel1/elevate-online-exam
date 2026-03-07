@@ -1,4 +1,4 @@
-import { BookOpenCheck, Brain, Eye, EyeOff, FolderCode, RectangleEllipsis } from "lucide-angular";
+import { BookOpenCheck, Brain, CircleX, Eye, EyeOff, FolderCode, RectangleEllipsis } from "lucide-angular";
 
 export const LucideIcons = {
   FolderCode,
@@ -10,5 +10,6 @@ export const LucideIcons = {
 
   // used in login-form, register-form
   EyeOff,
-  Eye
+  Eye,
+  CircleX
 }

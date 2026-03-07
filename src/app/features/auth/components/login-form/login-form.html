@@ -1,4 +1,4 @@
-<form class="space-y-6 font-geist mt-10">
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6 font-geist mt-10">
 
   <!-- Username -->
   <div>
@@ -6,8 +6,15 @@
       Username
     </label>
 
-    <input type="text" placeholder="user123"
-      class="w-full border border-gray-200 px-4 py-3 focus:outline-none focus:border-blue-600 placeholder:text-gray-400" />
+    <input type="text" placeholder="user123" formControlName="username"
+      class="w-full border border-gray-200 px-4 py-3 focus:outline-none focus:border-blue-600 placeholder:text-gray-400"
+      [class.border-red-500]="username?.touched && username?.invalid" />
+
+      @if(username?.touched && username?.invalid){
+      <p class="font-geist text-red-600 text-sm mt-1">
+        Your username is required
+      </p>
+      }
   </div>
 
   <!-- Password -->
@@ -16,12 +23,17 @@
       Password
     </label>
 
-    <div class="relative">
-      <input type="password" placeholder="********"
-        class="w-full border border-gray-200 px-4 py-3 pr-10 focus:outline-none focus:border-blue-600 placeholder:text-gray-400" />
-
-      <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer">
-        <i-lucide name="eye-off" [size]="18" class="text-gray-300"></i-lucide>
+    <div class="flex flex-col relative">
+      <input [type]="showPassword ? 'text' : 'password'" placeholder="********" formControlName="password"
+        class="w-full border border-gray-200 px-4 py-3 pr-10 focus:outline-none focus:border-blue-600 placeholder:text-gray-400"
+        [class.border-red-500]="password?.touched && password?.invalid" />
+      @if(password?.touched && password?.invalid){
+      <p class="font-geist text-red-600 text-sm mt-1">
+        Your password is required
+      </p>
+      }
+      <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer" (click)="togglePassword()">
+        <i-lucide [name]="showPassword ? 'eye-off' : 'eye'" [size]="18" class="text-gray-300"></i-lucide>
       </span>
     </div>
 
@@ -32,7 +44,16 @@
     </div>
   </div>
 
+    <!-- error alert -->
+  @if (loginError){
+  <div class="relative flex items-center justify-center text-sm bg-red-50 border border-red-600 text-red-600 px-4 py-2 mb-9">
+    <i-lucide name="circle-x" [size]="18" [strokeWidth]="1.5" class="mr-2 absolute -top-1/4 left-28 bg-gray-50 rounded-2xl"></i-lucide>
+    <span>{{ loginError }}</span>
+  </div>
+  }
+
+
   <!-- Button -->
   <app-auth-button>Login</app-auth-button>
-  
+
 </form>
