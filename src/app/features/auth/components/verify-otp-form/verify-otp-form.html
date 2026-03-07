@@ -1,4 +1,4 @@
-<div class="font-geist font-base">
+<div class="font-geist text-base">
   <div class="mb-10">
     <p class="max-w-lg text-gray-500 mt-4">
       Please enter the 6-digits code we have sent to:
@@ -10,7 +10,25 @@
     </a>
   </div>
 
-  <p class="font-sm text-gray-500 font-medium text-center">You can request another code in: 60s</p>
+  <!-- OTP Inputs -->
+  <div class="flex gap-3 mb-10 justify-center">
+    @for(item of otpArray; track $index; let i = $index){
+    <input #otp type="text" inputmode="numeric" maxlength="1"
+      class="w-10 h-10 border-2 border-gray-200 text-center text-base font-medium outline-none focus:border-blue-600 focus:text-blue-600"
+      (input)="onInput($event, i)" (keydown)="onKeyDown($event, i)">
+    }
+  </div>
+
+
+  @if(remainingSeconds > 0){
+  <p class="text-sm text-gray-500 font-medium text-center">You can request another code in: {{ remainingSeconds }}s</p>
+  }
+  @else{
+  <p class="text-sm text-gray-500 font-medium text-center">Didn't recieve the code? <span
+      class="text-blue-600 cursor-pointer hover:underline">Resend</span>
+  </p>
+  }
+
   <form class="space-y-6 font-geist mt-10">
 
     <!-- Button -->
