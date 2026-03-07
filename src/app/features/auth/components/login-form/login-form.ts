@@ -11,7 +11,7 @@ import { RouterLink } from '@angular/router';
   providers:[{
       provide: LUCIDE_ICONS,
       multi: true,
-      useValue: new LucideIconProvider({EyeOff,Eye}),
+      useValue: new LucideIconProvider({EyeOff, Eye}),
     }]
 })
 export class LoginForm {
