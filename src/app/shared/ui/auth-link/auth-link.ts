@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-auth-link',
@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './auth-link.css',
 })
 export class AuthLink {
-
+@Input() customClass = 'text-center';
 }
