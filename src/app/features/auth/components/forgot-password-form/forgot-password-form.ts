@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output } from '@angular/core';
 import { AuthButton } from '../../../../shared/ui/auth-button/auth-button';
 
 @Component({
@@ -8,5 +8,4 @@ import { AuthButton } from '../../../../shared/ui/auth-button/auth-button';
   styleUrl: './forgot-password-form.css',
 })
 export class ForgotPasswordForm {
-
 }

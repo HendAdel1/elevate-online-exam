@@ -1,3 +1,8 @@
-<button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium mb-8 py-3 transition-colors">
-  <ng-content></ng-content>
+<button
+  class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium mb-8 py-3 flex items-center justify-center transition-colors"
+>
+  <span> <ng-content></ng-content> </span>
+  @if (hasIcon) {
+    <i-lucide [img]="MoveRight" class="ml-2"></i-lucide>
+  }
 </button>
