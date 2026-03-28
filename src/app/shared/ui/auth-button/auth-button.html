@@ -1,8 +1,25 @@
-<button
-  class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-3 flex items-center justify-center transition-colors cursor-pointer"
->
-  <span> <ng-content></ng-content> </span>
+<button [attr.type]="type" [disabled]="disabled || loading"
+  class="w-full py-3 mt-10 text-sm font-medium flex items-center justify-center gap-2 transition-colors border cursor-pointer"
+  [ngClass]="{
+    'bg-blue-600 hover:bg-blue-700! text-white! border-blue-600':
+      variant === 'primary' && !(disabled || loading),
+
+    'bg-blue-50 text-gray-800 border-blue-600 hover:bg-blue-700 hover:text-white':
+      variant === 'secondary' && !(disabled || loading),
+
+    'bg-red-600 hover:bg-red-700 text-white border-red-600':
+      variant === 'danger' && !(disabled || loading),
+
+    'bg-gray-200 text-gray-400 border-gray-200 cursor-not-allowed':
+      disabled || loading
+  }">
+  @if (loading) {
+  <span class="animate-pulse">Loading...</span>
+  } @else {
+  <ng-content></ng-content>
+
   @if (hasIcon) {
-    <i-lucide [img]="MoveRight" class="ml-2"></i-lucide>
+  <i-lucide [img]="ChevronRight" class="w-4 h-4"></i-lucide>
+  }
   }
 </button>

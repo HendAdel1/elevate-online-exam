@@ -1,0 +1,42 @@
+<form [formGroup]="userInfoForm" (ngSubmit)="onSubmit()" class="space-y-6 font-geist mt-10">
+  <!-- First name & Last name -->
+  <div class="flex gap-4">
+    <!-- First name -->
+    <div class="flex-1">
+      <label class="block text-base font-medium text-gray-800 mb-2"> First name<span class="text-red-600 ml-0.5">*</span> </label>
+
+      <input formControlName="firstName" type="text" placeholder="Hend"
+        class="w-full border border-gray-200 px-4 py-3 focus:outline-none focus:border-blue-600 placeholder:text-gray-400" />
+    </div>
+
+    <!-- Last name -->
+    <div class="flex-1">
+      <label class="block text-base font-medium text-gray-800 mb-2"> Last name<span class="text-red-600 ml-0.5">*</span> </label>
+
+      <input formControlName="lastName" type="text" placeholder="Adel"
+        class="w-full border border-gray-200 px-4 py-3 focus:outline-none focus:border-blue-600 placeholder:text-gray-400" />
+    </div>
+  </div>
+
+  <!-- Username -->
+  <div>
+    <label class="block text-base font-medium text-gray-800 mb-2"> Username<span class="text-red-600 ml-0.5">*</span> </label>
+
+    <input formControlName="username" type="text" placeholder="user123"
+      class="w-full border border-gray-200 px-4 py-3 focus:outline-none focus:border-blue-600 placeholder:text-gray-400" />
+  </div>
+
+  <!-- Phone -->
+  <div>
+    <label class="block text-base font-medium text-gray-800 mb-2"> Phone </label>
+
+    <div class="w-full [&_.iti]:w-full [&_.iti__tel-input]:w-full">
+    <input formControlName="phone" type="tel" placeholder="1012345678" ngxPhoneField [ngxPhoneFieldParams]="params"
+      class="d-block w-full border border-gray-200 px-4 py-3 focus:outline-none focus:border-blue-600 placeholder:text-gray-400" />
+      </div>
+  </div>
+
+  <!-- Button -->
+  <app-auth-button variant="secondary" [hasIcon]="true">Next</app-auth-button>
+
+</form>

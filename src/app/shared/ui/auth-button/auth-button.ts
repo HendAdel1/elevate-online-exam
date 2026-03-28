@@ -1,15 +1,22 @@
+import { NgClass } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { LucideAngularModule, MoveRight } from 'lucide-angular';
+import { LucideAngularModule, ChevronRight } from 'lucide-angular';
 
 @Component({
   selector: 'app-auth-button',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, NgClass],
   templateUrl: './auth-button.html',
   styleUrl: './auth-button.css',
 })
 export class AuthButton {
-  
-  readonly MoveRight = MoveRight;
-  @Input() hasIcon: boolean = false;
 
+  readonly ChevronRight = ChevronRight;
+
+  @Input() hasIcon: boolean = false;
+  @Input() disabled: boolean = false;
+  @Input() loading: boolean = false;
+
+  @Input() type: 'button' | 'submit' = 'button'
+
+  @Input() variant: 'primary' | 'secondary' | 'danger' = 'primary';
 }

@@ -19,7 +19,30 @@ export const authRoutes: Routes = [
       {
         path: 'register',
         loadComponent: () =>
-          import('./pages/register/register').then((m) => m.Register),
+          import('./pages/registeration/register/register').then((m) => m.Register),
+        children: [
+          { path: '', redirectTo: 'email', pathMatch: 'full'},
+          {
+            path: 'email',
+            loadComponent: () =>
+              import('./pages/registeration/steps/email/email').then((m) => m.Email)
+          },
+          {
+            path: 'verify-otp',
+            loadComponent: () =>
+              import('./pages/registeration/steps/verify-otp/verify-otp').then((m) => m.VerifyOtp),
+          },
+          {
+            path: 'user-info',
+            loadComponent: () =>
+              import('./pages/registeration/steps/user-info/user-info').then((m) => m.UserInfo),
+          },
+          {
+            path: 'create-password',
+            loadComponent: () =>
+              import('./pages/registeration/steps/create-password/create-password').then((m) => m.CreatePassword),
+          },
+        ]
       },
       {
         path: 'forgot-password',
@@ -27,19 +50,14 @@ export const authRoutes: Routes = [
           import('./pages/forgot-password/forgot-password').then((m) => m.ForgotPassword),
       },
       {
-        path: 'verify-otp',
-        loadComponent: () =>
-          import('./pages/verify-otp/verify-otp').then((m) => m.VerifyOtp),
-      },
-      {
         path: 'verify-email',
         loadComponent: () =>
           import('./pages/verify-email/verify-email').then((m) => m.VerifyEmail),
       },
       {
-        path: 'create-password',
+        path: 'create-new-password',
         loadComponent: () =>
-          import('./pages/create-password/create-password').then((m) => m.CreatePassword),
+          import('./pages/create-new-password/create-new-password').then((m) => m.CreateNewPassword),
       },
     ]
   },
