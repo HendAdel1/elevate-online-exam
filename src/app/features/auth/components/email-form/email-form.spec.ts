@@ -20,4 +20,12 @@ describe('EmailForm', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have form with email control', () => {
+    expect(component.form.get('email')).toBeTruthy();
+  });
+
+  it('form should be invalid initially', () => {
+    expect(component.form.valid).toBeFalsy();
+  });
 });
