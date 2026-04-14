@@ -1,8 +1,5 @@
 import { Adapter } from '../models/adapter';
-
-export interface ResetPasswordResponse {
-  message: string;
-}
+import { ResetPasswordResponse } from '../models/responses/reset-password.response';
 
 export class ResetPasswordAdapter implements Adapter<ResetPasswordResponse, { message: string }> {
   adapt(res: ResetPasswordResponse): { message: string } {

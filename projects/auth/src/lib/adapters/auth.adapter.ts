@@ -9,7 +9,7 @@ import { RegisterResponse } from "../models/responses/register.response";
 import { SendEmailResponse } from "../models/responses/send-email.response";
 import { ForgotPasswordResponse } from "../models/responses/forgot-password.response";
 import { VerifyEmailResponse } from "../models/responses/verify-email.response";
-import { ResetPasswordResponse } from './reset-password.adapter';
+import { ResetPasswordResponse } from '../models/responses/reset-password.response';
 
 export class AuthAdapter {
 

@@ -1,3 +1,3 @@
-export interface ForgotPasswordRequest {
+export interface ResetPasswordResponse {
   message: string;
 }
