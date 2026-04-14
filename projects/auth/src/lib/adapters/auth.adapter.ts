@@ -7,7 +7,7 @@ import { ResetPasswordAdapter } from './reset-password.adapter';
 import { LoginResponse } from "../models/responses/login.response";
 import { RegisterResponse } from "../models/responses/register.response";
 import { SendEmailResponse } from "../models/responses/send-email.response";
-import { ForgotPasswordResponse } from "../models/responses/forgor-password.response";
+import { ForgotPasswordResponse } from "../models/responses/forgot-password.response";
 import { VerifyEmailResponse } from "../models/responses/verify-email.response";
 import { ResetPasswordResponse } from './reset-password.adapter';
 
