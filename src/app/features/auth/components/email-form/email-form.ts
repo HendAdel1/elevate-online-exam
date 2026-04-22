@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { finalize } from 'rxjs';
 import { AuthButton } from "../../../../shared/ui/auth-button/auth-button";
 import { AuthService } from '../../../../../../projects/auth/src/lib/services/auth.service';
 
@@ -16,11 +17,15 @@ export class EmailForm implements AfterViewInit {
   @ViewChild('emailInput') emailInput!: ElementRef;
 
   form = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email],
+    }),
   });
 
   isSubmitting = signal(false);
-  message = signal('');
+  successMessage = signal('');
+  errorMessage = signal('');
 
   constructor(
     private route: ActivatedRoute,
@@ -35,24 +40,32 @@ export class EmailForm implements AfterViewInit {
     }
   }
 
+  get emailControl() {
+    return this.form.controls.email;
+  }
+
   onSubmit() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
     this.isSubmitting.set(true);
-    this.message.set('');
+    this.successMessage.set('');
+    this.errorMessage.set('');
 
-    const { email } = this.form.value as { email: string };
+    const email = this.form.controls.email.value.trim().toLowerCase();
 
-    this.authService.sendEmail({ email }).subscribe({
-      next: (response) => {
-        this.message.set(response.message);
+    this.authService.sendEmail({ email }).pipe(
+      finalize(() => this.isSubmitting.set(false))
+    ).subscribe({
+      next: () => {
+        this.successMessage.set('Verification code sent successfully.');
         this.router.navigate(['/auth/register/verify-otp'], { queryParams: { email } });
       },
-      error: (err) => {
-        this.message.set(err.error?.message || 'An error occurred');
-      }
-    }).add(() => {
-      this.isSubmitting.set(false);
+      error: (err: { error?: { message?: string }; message?: string }) => {
+        this.errorMessage.set(err?.error?.message ?? err?.message ?? 'Failed to send verification code.');
+      },
     });
   }
 }

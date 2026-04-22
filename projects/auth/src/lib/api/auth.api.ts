@@ -1,6 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { AuthEndpoints } from '../enums/auth-endpoints';
+import { Observable } from 'rxjs';
 import { SendEmailRequest } from '../models/requests/send-email.request';
 import { RegisterRequest } from '../models/requests/register.request';
 import { LoginRequest } from '../models/requests/login.request';
@@ -14,34 +12,11 @@ import { LoginResponse } from '../models/responses/login.response';
 import { ForgotPasswordResponse } from '../models/responses/forgot-password.response';
 import { ResetPasswordResponse } from '../models/responses/reset-password.response';
 
-@Injectable({
-  providedIn: 'root'
-})
-
-export class AuthApi {
-  private http = inject(HttpClient);
-
-  sendEmail(data: SendEmailRequest) {
-    return this.http.post<SendEmailResponse>(AuthEndpoints.SendEmail, data);
-  }
-
-  verifyEmail(data: VerifyEmailRequest) {
-    return this.http.post<VerifyEmailResponse>(AuthEndpoints.VerifyEmail, data);
-  }
-
-  register(data: RegisterRequest) {
-    return this.http.post<RegisterResponse>(AuthEndpoints.Register, data);
-  }
-
-  login(data: LoginRequest) {
-    return this.http.post<LoginResponse>(AuthEndpoints.Login, data);
-  }
-
-  forgotPassword(data: ForgotPasswordRequest) {
-    return this.http.post<ForgotPasswordResponse>(AuthEndpoints.ForgotPassword, data);
-  }
-
-  resetPassword(data: ResetPasswordRequest) {
-    return this.http.post<ResetPasswordResponse>(AuthEndpoints.ResetPassword, data);
-  }
+export abstract class AuthApi {
+  abstract sendEmail(data: SendEmailRequest): Observable<SendEmailResponse>;
+  abstract verifyEmail(data: VerifyEmailRequest): Observable<VerifyEmailResponse>;
+  abstract register(data: RegisterRequest): Observable<RegisterResponse>;
+  abstract login(data: LoginRequest): Observable<LoginResponse>;
+  abstract forgotPassword(data: ForgotPasswordRequest): Observable<ForgotPasswordResponse>;
+  abstract resetPassword(data: ResetPasswordRequest): Observable<ResetPasswordResponse>;
 }

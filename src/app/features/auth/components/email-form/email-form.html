@@ -8,39 +8,41 @@
       formControlName="email"
       type="email"
       placeholder="user@example.com"
-      class="w-full border border-gray-200 px-4 py-3 focus:outline-none focus:border-blue-600 placeholder:text-gray-400"
+      [class]="
+        'w-full border px-4 py-3 focus:outline-none placeholder:text-gray-400 ' +
+        (emailControl.invalid && emailControl.touched
+          ? 'border-red-500 focus:border-red-500'
+          : 'border-gray-200 focus:border-blue-600')
+      "
     />
 
-    @if (form.get('email')?.invalid && form.get('email')?.touched) {
-      <div class="text-red-500 text-sm mt-1">Please enter a valid email address.</div>
+    @if (emailControl.touched && emailControl.hasError('required')) {
+    <div class="text-red-500 text-sm mt-1">Email is required.</div>
+    } @else if (emailControl.touched && emailControl.hasError('email')) {
+    <div class="text-red-500 text-sm mt-1">Please enter a valid email address.</div>
     }
   </div>
 
   <!-- Success Message -->
-  @if (message() && !isSubmitting()) {
-    <div class="p-3 bg-green-50 border border-green-200 text-green-800 rounded-md text-sm">
-      {{ message() }}
-    </div>
+  @if (successMessage()) {
+  <div class="p-3 bg-green-50 border border-green-200 text-green-800 rounded-md text-sm">
+    {{ successMessage() }}
+  </div>
   }
 
   <!-- Error Message -->
-  @if (message() && isSubmitting()) {
-    <div class="p-3 bg-red-50 border border-red-200 text-red-800 rounded-md text-sm">
-      {{ message() }}
-    </div>
+  @if (errorMessage()) {
+  <div class="p-3 bg-red-50 border border-red-200 text-red-800 rounded-md text-sm">
+    {{ errorMessage() }}
+  </div>
   }
 
   <!-- Button -->
-  <app-auth-button
-    variant="secondary"
-    [hasIcon]="true"
-    type="submit"
-    [disabled]="form.invalid || isSubmitting()"
-  >
+  <app-auth-button variant="secondary" [hasIcon]="true" type="submit" [disabled]="isSubmitting()">
     @if (!isSubmitting()) {
-      <span>Next</span>
+    <span>Next</span>
     } @else {
-      <span>Sending...</span>
+    <span>Sending...</span>
     }
   </app-auth-button>
 </form>

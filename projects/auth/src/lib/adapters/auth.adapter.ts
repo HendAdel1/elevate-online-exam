@@ -14,26 +14,26 @@ import { ResetPasswordResponse } from '../models/responses/reset-password.respon
 export class AuthAdapter {
 
   static adaptSendEmail(res: SendEmailResponse) {
-    return new SendEmailAdapter().adapt(res);
+    return SendEmailAdapter.adapt(res);
   }
 
   static adaptLogin(res: LoginResponse) {
-    return new LoginAdapter().adapt(res);
+    return LoginAdapter.adapt(res);
   }
 
   static adaptRegister(res: RegisterResponse) {
-    return new RegisterAdapter().adapt(res);
+    return RegisterAdapter.adapt(res);
   }
 
   static adaptForgotPassword(res: ForgotPasswordResponse) {
-    return new ForgotPasswordAdapter().adapt(res);
+    return ForgotPasswordAdapter.adapt(res);
   }
 
   static adaptVerifyEmail(res: VerifyEmailResponse) {
-    return new VerifyEmailAdapter().adapt(res);
+    return VerifyEmailAdapter.adapt(res);
   }
 
   static adaptResetPassword(res: ResetPasswordResponse) {
-    return new ResetPasswordAdapter().adapt(res);
+    return ResetPasswordAdapter.adapt(res);
   }
 }
