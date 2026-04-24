@@ -41,10 +41,7 @@ export class DefaultAuthService extends AuthService {
 
   verifyEmail(data: VerifyEmailRequest) {
     return this.api.verifyEmail(data).pipe(
-      map(AuthAdapter.adaptVerifyEmail),
-      catchError((err: HttpErrorResponse) =>
-        of({ message: this.getErrorMessage(err) })
-      )
+      map(AuthAdapter.adaptVerifyEmail)
     );
   }
 

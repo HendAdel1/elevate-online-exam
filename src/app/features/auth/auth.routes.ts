@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { AuthLayout } from "../../layout/auth/auth-layout/auth-layout";
+import { userInfoAccessGuard } from './guards/user-info-access.guard';
+import { verifyOtpAccessGuard } from './guards/verify-otp-access.guard';
 
 export const authRoutes: Routes = [
   {
@@ -29,11 +31,13 @@ export const authRoutes: Routes = [
           },
           {
             path: 'verify-otp',
+            canActivate: [verifyOtpAccessGuard],
             loadComponent: () =>
               import('./pages/registeration/steps/verify-otp/verify-otp').then((m) => m.VerifyOtp),
           },
           {
             path: 'user-info',
+            canActivate: [userInfoAccessGuard],
             loadComponent: () =>
               import('./pages/registeration/steps/user-info/user-info').then((m) => m.UserInfo),
           },

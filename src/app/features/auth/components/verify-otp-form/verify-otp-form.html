@@ -3,7 +3,7 @@
     <p class="max-w-lg text-gray-500 mt-4">
       Please enter the 6-digits code we have sent to:
     </p>
-    <span class="text-gray-800">user@example.com. </span>
+    <span class="text-gray-800">{{ email || 'your email address' }}. </span>
     <a class="text-blue-600 font-medium cursor-pointer underline" routerLink="/auth/register"
       [queryParams]="{ focus: 'email' }">
       Edit
@@ -25,14 +25,30 @@
   }
   @else{
   <p class="text-sm text-gray-500 font-medium text-center">Didn't recieve the code? <span
-      class="text-blue-600 cursor-pointer hover:underline">Resend</span>
+      class="text-blue-600 cursor-pointer hover:underline" (click)="resendCode()">Resend</span>
   </p>
   }
 
-  <form class="space-y-6 font-geist mt-10">
+  @if (successMessage()) {
+  <div class="p-3 mt-6 bg-green-50 border border-green-200 text-green-800 rounded-md text-sm">
+    {{ successMessage() }}
+  </div>
+  }
 
+  @if (errorMessage()) {
+  <div class="p-3 mt-6 bg-red-50 border border-red-200 text-red-800 rounded-md text-sm">
+    {{ errorMessage() }}
+  </div>
+  }
+
+  <div class="space-y-6 font-geist mt-10">
     <!-- Button -->
-    <app-auth-button variant="secondary">Verify Code</app-auth-button>
-
-  </form>
+    <app-auth-button variant="secondary" type="button" [disabled]="isSubmitting()" (click)="verifyCode()">
+      @if (!isSubmitting()) {
+      Verify Code
+      } @else {
+      Verifying...
+      }
+    </app-auth-button>
+  </div>
 </div>
