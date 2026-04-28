@@ -3,40 +3,69 @@
   <div class="flex gap-4">
     <!-- First name -->
     <div class="flex-1">
-      <label class="block text-base font-medium text-gray-800 mb-2"> First name<span class="text-red-600 ml-0.5">*</span> </label>
+      <label class="block text-base font-medium text-gray-800 mb-2"> First name<span
+          class="text-red-600 ml-0.5">*</span> </label>
 
-      <input formControlName="firstName" type="text" placeholder="Hend"
-        class="w-full border border-gray-200 px-4 py-3 focus:outline-none focus:border-blue-600 placeholder:text-gray-400" />
+      <input formControlName="firstName" type="text" placeholder="Hend" 
+      [class]="'w-full border px-4 py-3 focus:outline-none placeholder:text-gray-400 ' +
+        (formControls.firstName.invalid && formControls.firstName.touched
+          ? 'border-red-500 focus:border-red-500'
+          : 'border-gray-200 focus:border-blue-600')" />
+      @if (firstNameErrorMessage) {
+      <p class="font-geist text-red-600 text-sm mt-1">{{ firstNameErrorMessage }}</p>
+      }
     </div>
 
     <!-- Last name -->
     <div class="flex-1">
-      <label class="block text-base font-medium text-gray-800 mb-2"> Last name<span class="text-red-600 ml-0.5">*</span> </label>
+      <label class="block text-base font-medium text-gray-800 mb-2"> Last name<span class="text-red-600 ml-0.5">*</span>
+      </label>
 
-      <input formControlName="lastName" type="text" placeholder="Adel"
-        class="w-full border border-gray-200 px-4 py-3 focus:outline-none focus:border-blue-600 placeholder:text-gray-400" />
+      <input formControlName="lastName" type="text" placeholder="Adel" 
+      [class]="'w-full border px-4 py-3 focus:outline-none placeholder:text-gray-400 ' +
+        (formControls.lastName.invalid && formControls.lastName.touched
+          ? 'border-red-500 focus:border-red-500'
+          : 'border-gray-200 focus:border-blue-600')" />
+      @if (lastNameErrorMessage) {
+      <p class="font-geist text-red-600 text-sm mt-1">{{ lastNameErrorMessage }}</p>
+      }
     </div>
   </div>
 
   <!-- Username -->
   <div>
-    <label class="block text-base font-medium text-gray-800 mb-2"> Username<span class="text-red-600 ml-0.5">*</span> </label>
+    <label class="block text-base font-medium text-gray-800 mb-2"> Username<span class="text-red-600 ml-0.5">*</span>
+    </label>
 
-    <input formControlName="username" type="text" placeholder="user123"
-      class="w-full border border-gray-200 px-4 py-3 focus:outline-none focus:border-blue-600 placeholder:text-gray-400" />
+    <input formControlName="username" type="text" placeholder="user123" 
+    [class]="'w-full border px-4 py-3 focus:outline-none placeholder:text-gray-400 ' +
+      (formControls.username.invalid && formControls.username.touched
+        ? 'border-red-500 focus:border-red-500'
+        : 'border-gray-200 focus:border-blue-600')" />
+    @if (usernameErrorMessage) {
+    <p class="font-geist text-red-600 text-sm mt-1">{{ usernameErrorMessage }}</p>
+    }
   </div>
 
   <!-- Phone -->
   <div>
-    <label class="block text-base font-medium text-gray-800 mb-2"> Phone </label>
+    <label class="block text-base font-medium text-gray-800 mb-2"> Phone<span class="text-red-600 ml-0.5">*</span>
+    </label>
 
     <div class="w-full [&_.iti]:w-full [&_.iti__tel-input]:w-full">
-    <input formControlName="phone" type="tel" placeholder="1012345678" ngxPhoneField [ngxPhoneFieldParams]="params"
-      class="d-block w-full border border-gray-200 px-4 py-3 focus:outline-none focus:border-blue-600 placeholder:text-gray-400" />
-      </div>
+      <input formControlName="phone" type="tel" placeholder="1012345678" ngxPhoneField [ngxPhoneFieldParams]="params"
+        (blur)="formControls.phone.markAsTouched()" 
+        [class]="'d-block w-full border px-4 py-3 focus:outline-none placeholder:text-gray-400 ' +
+          (formControls.phone.invalid && formControls.phone.touched
+            ? 'border-red-500 focus:border-red-500'
+            : 'border-gray-200 focus:border-blue-600')" />
+    </div>
+    @if (phoneErrorMessage) {
+    <p class="font-geist text-red-600 text-sm mt-1">{{ phoneErrorMessage }}</p>
+    }
   </div>
 
   <!-- Button -->
-  <app-auth-button variant="secondary" [hasIcon]="true">Next</app-auth-button>
+  <app-auth-button variant="secondary" [hasIcon]="true" type="submit">Next</app-auth-button>
 
 </form>
