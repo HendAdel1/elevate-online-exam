@@ -85,6 +85,7 @@ export class VerifyOtpForm implements OnInit, OnDestroy {
 
   // OTP
   onInput(event: Event, index: number) {
+    this.errorMessage.set('');
     const input = event.target as HTMLInputElement;
     const value = input.value.replace(/\D/g, '');
 
@@ -139,14 +140,14 @@ export class VerifyOtpForm implements OnInit, OnDestroy {
         next: (res) => {
           sessionStorage.removeItem(VERIFY_EMAIL_STORAGE_KEY);
 
-          if (res.message.toLowerCase().includes('fail')) {
-            this.errorMessage.set(res.message);
-            return;
-          }
-
           this.successMessage.set(res.message || 'Verified');
           setBoolean(USER_INFO_ACCESS_STORAGE_KEY, true);
           this.router.navigate(['/auth/register/user-info']);
+        },
+        error: (err) => {
+          this.errorMessage.set(
+            err?.error?.message || 'Invalid code or expired'
+          );
         }
       });
   }
