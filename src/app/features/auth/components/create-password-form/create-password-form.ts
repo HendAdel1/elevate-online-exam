@@ -1,56 +1,236 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, signal } from '@angular/core';
 import { Eye, EyeOff, LUCIDE_ICONS, LucideAngularModule, LucideIconProvider } from 'lucide-angular';
 import { AuthButton } from '../../../../shared/ui/auth-button/auth-button';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { finalize } from 'rxjs';
+import { AuthService } from '../../../../../../projects/auth/src/lib/services/auth.service';
+import { RegisterRequest } from '../../../../../../projects/auth/src/lib/models/requests/register.request';
+import { setBoolean } from '../../utils/storage.util';
+import { passwordValidator } from '../../validators/password.validator';
+
+const USER_INFO_STORAGE_KEY = 'auth_user_info';
+const VERIFY_EMAIL_STORAGE_KEY = 'auth_verify_email';
+const USER_INFO_ACCESS_STORAGE_KEY = 'auth_user_info_access';
+const CREATE_PASSWORD_ACCESS_STORAGE_KEY = 'auth_create_password_access';
+
+const passwordMatchValidator = (group: AbstractControl): ValidationErrors | null => {
+  const password = group.get('password')?.value;
+  const confirmPassword = group.get('confirmPassword')?.value;
+
+  if (!password || !confirmPassword) return null;
+
+  return password === confirmPassword ? null : { passwordMismatch: true };
+};
 
 @Component({
   selector: 'app-create-password-form',
-  imports: [LucideAngularModule, AuthButton],
+  imports: [LucideAngularModule, AuthButton, ReactiveFormsModule],
   templateUrl: './create-password-form.html',
   styleUrl: './create-password-form.css',
-  providers:[{
+  providers:[{ 
         provide: LUCIDE_ICONS,
         multi: true,
-        useValue: new LucideIconProvider({EyeOff, Eye}),
+        useValue: new LucideIconProvider({EyeOff, Eye}), 
       }]
 })
-export class CreatePasswordForm {
+export class CreatePasswordForm implements OnInit, OnDestroy {
+  @ViewChild('passwordInput') passwordInput!: ElementRef<HTMLInputElement>;
 
-  loginForm: FormGroup;
+  registerForm: FormGroup;
+  controls: any;
+
   showPassword = false;
   showConfirmPassword = false;
-  loginError: string | null = null;
 
-  constructor(private fb: FormBuilder) {
-    this.loginForm = this.fb.group({
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
+  errorMessage: string | null = null;
+  isSubmitting = signal(false);
+
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    this.registerForm = this.fb.group(
+      {
+        password: ['', [Validators.required, passwordValidator()]],
+        confirmPassword: ['', [Validators.required]],
+      },
+      { validators: passwordMatchValidator }
+    );
+
+    this.controls = this.registerForm.controls;
+  }
+
+  ngOnInit(): void {
+    history.pushState(null, '', location.href);
+  }
+
+  @HostListener('window:popstate')
+  onBrowserBack(): void {
+    setBoolean(USER_INFO_ACCESS_STORAGE_KEY, false);
+    setBoolean(CREATE_PASSWORD_ACCESS_STORAGE_KEY, false);
+
+    sessionStorage.removeItem(USER_INFO_STORAGE_KEY);
+    sessionStorage.removeItem(VERIFY_EMAIL_STORAGE_KEY);
+
+    this.router.navigate(['/auth/register/email'], {
+      queryParams: { focus: 'email' },
+      replaceUrl: true,
     });
+  }
+
+  ngAfterViewInit() {
+    const focus = this.route.snapshot.queryParamMap.get('focus');
+    if (focus === 'password') {
+      this.passwordInput?.nativeElement.focus();
+    }
+  }
+
+  // reusable input classes to avoid code duplication
+  getInputClasses(control: AbstractControl | null, extraInvalid = false): string {
+    const base =
+      'w-full border px-4 py-3 pr-10 focus:outline-none placeholder:text-gray-400';
+
+    const isInvalid = (control?.invalid && control?.touched) || extraInvalid;
+
+    return isInvalid
+      ? `${base} border-red-500 focus:border-red-500`
+      : `${base} border-gray-200 focus:border-blue-600`;
   }
 
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
-  
+
   toggleConfirmPassword() {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   onSubmit() {
-    if (this.loginForm.invalid) {
-      // Mark all controls as touched to show validation errors
-      this.loginForm.markAllAsTouched();
-      this.loginError = 'Something went wrong';
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      this.errorMessage = this.formErrorMessage;
+
+      this.passwordInput?.nativeElement.focus();
       return;
     }
+
+    const userInfoRaw = sessionStorage.getItem(USER_INFO_STORAGE_KEY);
+    const email = (sessionStorage.getItem(VERIFY_EMAIL_STORAGE_KEY) ?? '')
+      .trim()
+      .toLowerCase();
+
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    if (!userInfoRaw || !email || !isValidEmail) {
+      this.errorMessage = 'Missing registration data. Please start again.';
+      this.router.navigate(['/auth/register/email'], {
+        queryParams: { focus: 'email' },
+      });
+      return;
+    }
+
+    let userInfo: Omit<RegisterRequest, 'email' | 'password' | 'confirmPassword'>;
+
+    try {
+      userInfo = JSON.parse(userInfoRaw);
+    } catch {
+      this.errorMessage = 'Invalid saved registration info. Please start again.';
+      this.router.navigate(['/auth/register/email'], {
+        queryParams: { focus: 'email' },
+      });
+      return;
+    }
+
+    const { password, confirmPassword } = this.registerForm.value;
+
+    const payload: RegisterRequest = {
+      ...userInfo,
+      email,
+      password,
+      confirmPassword,
+    };
+
+    if (!payload.firstName || !payload.lastName || !payload.username || !payload.phone) {
+      this.errorMessage = 'Missing registration data. Please complete your info first.';
+      this.router.navigate(['/auth/register/user-info']);
+      return;
+    }
+
+    this.isSubmitting.set(true);
+    this.errorMessage = null;
+
+    this.authService
+      .register(payload)
+      .pipe(finalize(() => this.isSubmitting.set(false)))
+      .subscribe({
+        next: (res) => {
+          if (res.message !== 'Registration successful') {
+            this.errorMessage = res.message || 'Registration failed.';
+            return;
+          }
+
+          sessionStorage.removeItem(USER_INFO_STORAGE_KEY);
+          sessionStorage.removeItem(VERIFY_EMAIL_STORAGE_KEY);
+
+          setBoolean(CREATE_PASSWORD_ACCESS_STORAGE_KEY, false);
+
+          this.router.navigate(['/auth/login']);
+        },
+        error: (err) => {
+          this.errorMessage = err?.error?.message || 'Something went wrong';
+        },
+      });
   }
 
-  get password() {
-    return this.loginForm.get('password');
+  // reusable error handler
+  private getError(control: AbstractControl | null, map: Record<string, string>): string {
+    if (!control?.touched) return '';
+
+    for (const key of Object.keys(map)) {
+      if (control.hasError(key)) return map[key];
+    }
+
+    return '';
   }
 
-  get confirmPassword() {
-    return this.loginForm.get('confirmPassword');
+  get passwordErrorMessage(): string {
+  return this.getError(this.controls['password'], {
+    required: 'Password is required.',
+    minlength: 'Password must be at least 8 characters.',
+    uppercase: 'Must include at least one uppercase letter.',
+    number: 'Must include at least one number.',
+    specialChar: 'Must include at least one special character.',
+  });
+}
+
+  get confirmPasswordErrorMessage(): string {
+    const control = this.controls['confirmPassword'];
+
+    const requiredError = this.getError(control, {
+      required: 'Confirm password is required.',
+    });
+
+    if (requiredError) return requiredError;
+
+    if (this.registerForm.hasError('passwordMismatch')) {
+      return 'Passwords do not match.';
+    }
+
+    return '';
   }
 
+  get formErrorMessage(): string {
+    return (
+      this.passwordErrorMessage ||
+      this.confirmPasswordErrorMessage ||
+      'Please check your inputs.'
+    );
+  }
+
+  ngOnDestroy(): void {
+    history.replaceState(null, '', location.href);
+  }
 }

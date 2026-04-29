@@ -138,8 +138,6 @@ export class VerifyOtpForm implements OnInit, OnDestroy {
       .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
         next: (res) => {
-          sessionStorage.removeItem(VERIFY_EMAIL_STORAGE_KEY);
-
           this.successMessage.set(res.message || 'Verified');
           setBoolean(USER_INFO_ACCESS_STORAGE_KEY, true);
           this.router.navigate(['/auth/register/user-info']);

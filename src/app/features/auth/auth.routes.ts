@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AuthLayout } from "../../layout/auth/auth-layout/auth-layout";
 import { userInfoAccessGuard } from './guards/user-info-access.guard';
 import { verifyOtpAccessGuard } from './guards/verify-otp-access.guard';
+import { createPasswordAccessGuard } from './guards/create-password-access.guard';
 
 export const authRoutes: Routes = [
   {
@@ -43,6 +44,7 @@ export const authRoutes: Routes = [
           },
           {
             path: 'create-password',
+            canActivate: [createPasswordAccessGuard],
             loadComponent: () =>
               import('./pages/registeration/steps/create-password/create-password').then((m) => m.CreatePassword),
           },

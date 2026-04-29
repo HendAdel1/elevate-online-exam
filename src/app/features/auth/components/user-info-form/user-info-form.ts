@@ -4,8 +4,10 @@ import { Router } from '@angular/router';
 import { Iti } from 'intl-tel-input';
 import { NgxPhoneField } from 'ngx-phone-field';
 import { AuthButton } from "../../../../shared/ui/auth-button/auth-button";
+import { setBoolean } from '../../utils/storage.util';
 
 const USER_INFO_STORAGE_KEY = 'auth_user_info';
+const CREATE_PASSWORD_ACCESS_STORAGE_KEY = 'auth_create_password_access';
 type PhoneValue = Iti | null;
 
 type InvalidPhoneError = {
@@ -139,6 +141,7 @@ export class UserInfoForm {
       USER_INFO_STORAGE_KEY,
       JSON.stringify(payload)
     );
+    setBoolean(CREATE_PASSWORD_ACCESS_STORAGE_KEY, true);
   
     this.router.navigate(['/auth/register/create-password']);
   }

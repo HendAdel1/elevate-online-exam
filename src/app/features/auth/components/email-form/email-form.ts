@@ -8,6 +8,7 @@ import { setBoolean } from '../../utils/storage.util';
 
 const VERIFY_EMAIL_STORAGE_KEY = 'auth_verify_email';
 const USER_INFO_ACCESS_STORAGE_KEY = 'auth_user_info_access';
+const CREATE_PASSWORD_ACCESS_STORAGE_KEY = 'auth_create_password_access';
 
 @Component({
   selector: 'app-email-form',
@@ -39,6 +40,11 @@ export class EmailForm implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     setBoolean(USER_INFO_ACCESS_STORAGE_KEY, false);
+    setBoolean(CREATE_PASSWORD_ACCESS_STORAGE_KEY, false);
+
+    this.emailControl.valueChanges.subscribe(() => {
+      this.errorMessage.set('');
+    });
   }
 
   ngAfterViewInit(): void {
@@ -76,6 +82,7 @@ export class EmailForm implements OnInit, AfterViewInit {
 
     const email = this.form.controls.email.value.trim().toLowerCase();
     setBoolean(USER_INFO_ACCESS_STORAGE_KEY, false);
+    setBoolean(CREATE_PASSWORD_ACCESS_STORAGE_KEY, false);
 
     this.authService.sendEmail({ email }).pipe(
       finalize(() => this.isSubmitting.set(false))
