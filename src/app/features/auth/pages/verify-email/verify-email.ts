@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthTitle } from '../../../../shared/ui/auth-title/auth-title';
 import { AuthLink } from '../../../../shared/ui/auth-link/auth-link';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { VerifyEmailSection } from '../../components/verify-email-section/verify-email-section';
 import { AuthBackButton } from '../../../../shared/ui/auth-back-button/auth-back-button';
 
@@ -11,4 +11,12 @@ import { AuthBackButton } from '../../../../shared/ui/auth-back-button/auth-back
   templateUrl: './verify-email.html',
   styleUrl: './verify-email.css',
 })
-export class VerifyEmail {}
+export class VerifyEmail {
+
+  constructor(private router: Router){}
+
+  goBack(){
+  this.router.navigate(['/auth/forgot-password']);
+  }
+
+}
