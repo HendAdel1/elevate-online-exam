@@ -4,6 +4,10 @@ import { Eye, EyeOff, LUCIDE_ICONS, LucideAngularModule, LucideIconProvider } fr
 import { AuthButton } from '../../../../shared/ui/auth-button/auth-button';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { AuthInput } from "../../../../shared/ui/auth-input/auth-input";
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../../../../../projects/auth/src/lib/services/auth.service';
+import { ResetPasswordRequest } from '../../../../../../projects/auth/src/lib/models/requests/reset-password.request';
+import { finalize } from 'rxjs';
 
 
 const passwordMatchValidator = (group: AbstractControl): ValidationErrors | null => {
@@ -48,20 +52,31 @@ export class CreateNewPasswordForm {
   errorMessage: string | null = null;
   showPassword = false;
   showConfirmPassword = false;
+  token: string = '';
+  isSubmitting: boolean = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
     this.form = this.fb.group({
       password: ['', [Validators.required, passwordValidator()]],
       confirmPassword: ['', Validators.required],
     },
-    { validators: passwordMatchValidator }
-  );  
-}
+      { validators: passwordMatchValidator });
+
+    this.route.queryParamMap.subscribe(params => {
+      this.token = params.get('token') ?? '';
+    });
+  }
 
 
-get controls() {
-return this.form.controls;
-}
+  get controls() {
+    return this.form.controls;
+  }
+
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
@@ -70,12 +85,6 @@ return this.form.controls;
     this.showConfirmPassword = !this.showConfirmPassword;
   }
 
-  onSubmit() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-  }
 
   // reusable error handler
   private getError(control: AbstractControl | null, map: Record<string, string>): string {
@@ -115,4 +124,37 @@ return this.form.controls;
   }
 
 
+  onSubmit() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    if (!this.token) {
+      this.errorMessage = 'Reset token is missing or invalid.';
+      return;
+    }
+
+    const { password, confirmPassword } = this.form.value;
+
+    const payload: ResetPasswordRequest = {
+      token: this.token,
+      newPassword: password,
+      confirmPassword,
+    };
+
+    this.isSubmitting = true;
+    this.errorMessage = null;
+
+    this.authService.resetPassword(payload)
+      .pipe(finalize(() => this.isSubmitting = false))
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/auth/login']);
+        },
+        error: (err) => {
+          this.errorMessage = err?.message || 'Something went wrong';
+        }
+      });
+  }
 }
