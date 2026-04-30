@@ -22,13 +22,17 @@ export class DefaultAuthService extends AuthService {
   }
 
   login(data: LoginRequest) {
-    return this.api.login(data).pipe(
-      map(AuthAdapter.adaptLogin),
-      catchError((err: HttpErrorResponse) =>
-        of({ token: '', message: this.getErrorMessage(err) })
-      )
-    );
-  }
+  return this.api.login(data).pipe(
+    map(AuthAdapter.adaptLogin),
+    catchError((err: HttpErrorResponse) =>
+      of({
+        token: '',
+        user: null,
+        message: this.getErrorMessage(err),
+      })
+    )
+  );
+}
 
   register(data: RegisterRequest) {
     return this.api.register(data).pipe(
