@@ -8,4 +8,10 @@ import { Component } from '@angular/core';
 })
 export class VerifyEmailSection {
 
+  email: string = '';
+
+  constructor(){
+    const state = history.state;
+    this.email = state?.email ?? 'user@example.com.'
+  }
 }

@@ -47,7 +47,7 @@ get emailControl() {
 
     this.authService.forgotPassword({email, redirectUrl: `${window.location.origin}/auth/create-new-password`}).pipe(finalize(() => this.isSubmitting = false))
     .subscribe((res) =>{
-      this.router.navigate(['/auth/verify-email'])
+      this.router.navigate(['/auth/verify-email'], { state: {email} } )
 
       if(!res.resetToken){
         this.errorMessage = res.message || 'Something went wrong';
