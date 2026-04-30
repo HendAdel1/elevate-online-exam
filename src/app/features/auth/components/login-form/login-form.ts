@@ -74,6 +74,7 @@ export class LoginForm {
         }
 
         sessionStorage.setItem('auth_token', res.token);
+        //to be updated navigation
         this.router.navigate(['/auth/forgot-password']);
       });
   }
