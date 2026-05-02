@@ -9,9 +9,11 @@ export const routes: Routes = [
     redirectTo: 'auth',
     pathMatch: 'full'
   },
-  {
+    {
     path: 'auth',
-    children: authRoutes
+    loadChildren: () =>
+      import('./features/auth/auth.routes')
+        .then(m => m.authRoutes)
   },
   {
     path: 'user-dashboard',
