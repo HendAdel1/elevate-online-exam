@@ -1,1 +1,17 @@
-<p>dashboard-layout works!</p>
+<div class="min-h-screen flex">
+
+  <!-- Sidebar - left side -->
+  <div class="w-64 shrink-0">
+    <app-sidenav class="h-full"></app-sidenav>
+  </div>
+
+  <!-- Content - right side -->
+  <div class="flex-1 flex flex-col">
+    <app-breadcrumb></app-breadcrumb>
+    <app-dashboard-header></app-dashboard-header>
+    <div class="flex-1 p-6">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+</div>
