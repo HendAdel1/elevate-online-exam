@@ -15,6 +15,8 @@ export const routes: Routes = [
   },
   {
     path: 'user-dashboard',
-    children: userDashboardRoutes
-  }
+    loadChildren: () =>
+      import('./features/user-dashboard/user-dashboard.routes')
+        .then(m => m.userDashboardRoutes)
+  },
 ];
