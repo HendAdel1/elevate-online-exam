@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Sidenav } from '../components/sidenav/sidenav';
 import { RouterOutlet } from '@angular/router';
-import { Breadcrumb } from '../components/breadcrumb/breadcrumb';
 import { DashboardHeader } from '../components/dashboard-header/dashboard-header';
+import { Breadcrumb } from '../../../shared/components/breadcrumb/breadcrumb';
 
 @Component({
   selector: 'app-dashboard-layout',
