@@ -27,6 +27,11 @@ export const userDashboardRoutes: Routes = [
           import('./pages/questions/questions').then(m => m.Questions)
       },
       {
+        path: 'diplomas/:diplomaId/exams/:examId/questions/:questionId/answers',
+        loadComponent: () =>
+          import('./pages/answers/answers').then(m => m.Answers)
+      },
+      {
         path: 'account',
         loadComponent: () =>
           import('./pages/account/account').then(m => m.Account)
