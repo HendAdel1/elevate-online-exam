@@ -1,7 +1,7 @@
-<nav aria-label="Breadcrumb" class="mb-4 flex items-center text-sm">
+<nav aria-label="Breadcrumb" class="flex items-center text-sm">
   <ol class="flex items-center space-x-2">
     @for (item of breadcrumbs; track item.url; let last = $last) {
-      <li class="flex items-center p-4">
+      <li class="flex items-center pt-4 px-4">
         @if (!last) {
           <a [routerLink]="item.url" class="font-geist text-sm text-gray-400 hover:text-blue-600 transition-colors">{{ item.label }}</a>
           <span class="mx-2 text-gray-400">/</span>

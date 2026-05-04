@@ -1,1 +1,19 @@
-<p>dashboard-header works!</p>
+<div class="flex gap-2.5">
+    <!-- Back Button -->
+    @if (showBack) {
+    <div class="flex items-center justify-center px-1.75 border border-blue-600 group hover:bg-blue-600 cursor-pointer transition-colors">
+        <i-lucide class="text-blue-600 group-hover:text-white" name="chevron-left" [size]="24" [strokeWidth]="1" [absoluteStrokeWidth]="true">
+        </i-lucide>
+    </div>
+    }
+
+    <!-- Header -->
+    <div class="flex items-center bg-blue-600 p-4 gap-4 w-full">
+        <i-lucide class="text-white" [name]="icon" [size]="45" [strokeWidth]="2" [absoluteStrokeWidth]="true">
+        </i-lucide>
+
+        <p class="font-inter text-3xl font-semibold text-white">
+            {{ title }}
+        </p>
+    </div>
+</div>
