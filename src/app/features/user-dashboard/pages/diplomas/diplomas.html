@@ -1,1 +1,45 @@
-<p>diplomas works!</p>
+<div class="pt-6 font-geist">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+
+        @for (diploma of diplomas; track diploma.id) {
+        <div [routerLink]="['/dashboard/diplomas', diploma.id, 'exams']"
+            class="relative overflow-hidden cursor-pointer group flex flex-col min-h-112 shadow-sm hover:shadow-md transition-shadow">
+
+            <!-- Image -->
+            <div class="absolute inset-0 bg-cover bg-center" [style.background-image]="'url(' + diploma.image + ')'">
+            </div>
+
+            <!-- Overlay -->
+            <div
+                class="absolute bottom-2.5 left-2.5 right-2.5 bg-blue-600/75 backdrop-blur-md p-4 text-white flex flex-col justify-end">
+                <h3 class="text-xl font-semibold mb-2 tracking-tight">
+                    {{ diploma.title }}
+                </h3>
+
+                <div
+                    class="relative max-h-10 overflow-hidden group-hover:max-h-96 transition-[max-height] duration-500 ease-in-out">
+                    <!-- Full Text -->
+                    <p class="text-sm opacity-0 group-hover:opacity-80 transition-opacity duration-500 line-clamp-6">
+
+                        {{ diploma.description }}
+                    </p>
+
+                    <!-- Clamped Text -->
+                    <p
+                        class="absolute top-0 left-0 w-full text-sm opacity-80 group-hover:opacity-0 transition-opacity duration-500 line-clamp-2 pointer-events-none">
+                        {{ diploma.description }}
+                    </p>
+                </div>
+            </div>
+
+        </div>
+        }
+
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="mt-6 flex flex-col items-center justify-center text-gray-500 cursor-pointer">
+        <p class="text-md mb-2 font-geist text-gray-600">Scroll to view more</p>
+            <i-lucide name="chevron-down" [size]="18" [strokeWidth]="1" [absoluteStrokeWidth]="true" class="gray-500"></i-lucide>
+    </div>
+</div>
