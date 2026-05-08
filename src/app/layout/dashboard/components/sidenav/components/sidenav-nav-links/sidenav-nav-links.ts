@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { GraduationCap, LUCIDE_ICONS, LucideAngularModule, LucideIconProvider, UserRound } from 'lucide-angular';
+import { DashboardNavLink } from '../../../../dashboard.types';
 
 @Component({
   selector: 'app-sidenav-nav-links',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, RouterLink, RouterLinkActive],
   templateUrl: './sidenav-nav-links.html',
   styleUrl: './sidenav-nav-links.css',
    providers:[{
@@ -13,13 +15,8 @@ import { GraduationCap, LUCIDE_ICONS, LucideAngularModule, LucideIconProvider, U
       }]
 })
 export class SidenavNavLinks {
-
-  activeRoute = 'diplomas';
-
-  links = [
+  @Input() links: DashboardNavLink[] = [
     { name: 'Diplomas', icon: 'graduation-cap', route: 'diplomas' },
     { name: 'Account Settings', icon: 'user-round', route: 'account-settings' }
   ];
-
-
 }

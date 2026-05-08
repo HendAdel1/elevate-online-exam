@@ -1,10 +1,10 @@
-<div class="p-10 h-screen bg-blue-50 flex flex-col">
+<div class="p-10 h-screen flex flex-col" [class.bg-blue-50]="theme === 'light'" [class.bg-gray-800]="theme === 'dark'">
     <!-- Top 'sidenav logo & brand' -->
     <app-sidenav-logo></app-sidenav-logo>
 
     <!-- Mid 'sidenav links' -->
     <div class="mt-15 flex-1">
-        <app-sidenav-nav-links></app-sidenav-nav-links>
+        <app-sidenav-nav-links [links]="navLinks"></app-sidenav-nav-links>
     </div>
 
     <!-- Bottom profile 'sidenav footer' -->

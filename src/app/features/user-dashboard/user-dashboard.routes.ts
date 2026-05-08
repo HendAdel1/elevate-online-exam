@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { DashboardLayout } from '../../layout/dashboard/dashboard-layout/dashboard-layout';
+import { UserDashboardLayout } from './layout/user-dashboard-layout/user-dashboard-layout/user-dashboard-layout';
 
 export const userDashboardRoutes: Routes = [
   {
     path: '',
-    component: DashboardLayout,
+    component: UserDashboardLayout,
     children: [
       {
         path: '',
@@ -48,7 +48,7 @@ export const userDashboardRoutes: Routes = [
           import('./pages/answers/answers').then(m => m.Answers)
       },
       {
-        path: 'account',
+        path: 'account-settings',
         data: { 
           breadcrumb: 'Account',
           header: { icon: 'user-round', label: 'Account Settings', showBack: true}

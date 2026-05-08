@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SidenavLogo } from "./components/sidenav-logo/sidenav-logo";
 import { SidenavNavLinks } from "./components/sidenav-nav-links/sidenav-nav-links";
 import { SidenavFooter } from "./components/sidenav-footer/sidenav-footer";
+import { DashboardNavLink, DashboardTheme } from '../../dashboard.types';
 @Component({
   selector: 'app-sidenav',
   imports: [SidenavLogo, SidenavNavLinks, SidenavFooter],
@@ -9,5 +10,6 @@ import { SidenavFooter } from "./components/sidenav-footer/sidenav-footer";
   styleUrl: './sidenav.css',
 })
 export class Sidenav {
-
+  @Input() theme: DashboardTheme = 'light';
+  @Input() navLinks: DashboardNavLink[] = [];
 }

@@ -1,17 +1,18 @@
 <ul>
   @for (link of links; track link.name) {
 
-  <li class="group flex items-center gap-5 p-4 mb-2.5 cursor-pointer border transition-colors hover:bg-blue-100 hover:border-blue-500"
-    [class.bg-blue-100]="link.route === activeRoute" [class.border-blue-500]="link.route === activeRoute"
-    [class.border-transparent]="link.route !== activeRoute">
+  <li [routerLink]="link.route" routerLinkActive #rla="routerLinkActive"
+    class="group flex items-center gap-5 p-4 mb-2.5 cursor-pointer border transition-colors hover:bg-blue-100 hover:border-blue-500"
+    [class.bg-blue-100]="rla.isActive" [class.border-blue-500]="rla.isActive"
+    [class.border-transparent]="!rla.isActive">
 
     <i-lucide [name]="link.icon" [size]="24" [strokeWidth]="1" [absoluteStrokeWidth]="true"
-      class="transition-colors group-hover:text-blue-600" [class.text-blue-600]="link.route === activeRoute"
-      [class.text-gray-500]="link.route !== activeRoute">
+      class="transition-colors group-hover:text-blue-600" [class.text-blue-600]="rla.isActive"
+      [class.text-gray-500]="!rla.isActive">
     </i-lucide>
 
-    <p class="font-geist text-md transition-colors group-hover:text-blue-600"
-      [class.text-blue-600]="link.route === activeRoute" [class.text-gray-500]="link.route !== activeRoute">
+    <p class="font-geist text-md transition-colors group-hover:text-blue-600" [class.text-blue-600]="rla.isActive"
+      [class.text-gray-500]="!rla.isActive">
       {{ link.name }}
     </p>
 
