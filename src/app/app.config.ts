@@ -5,16 +5,17 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { LucideAngularModule } from 'lucide-angular';
 import { LucideIcons } from './icons/icons';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { AuthApi } from '../../projects/auth/src/lib/api/auth.api';
 import { AuthService } from '../../projects/auth/src/lib/services/auth.service';
 import { DefaultAuthService } from '../../projects/auth/src/lib/services/auth-default.service';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     provideRouter(routes),
     importProvidersFrom(LucideAngularModule.pick(LucideIcons)),
     {
