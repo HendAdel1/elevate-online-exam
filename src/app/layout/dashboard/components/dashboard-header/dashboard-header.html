@@ -1,10 +1,14 @@
 <div class="flex gap-2.5">
     <!-- Back Button -->
     @if (showBack) {
-    <div class="flex items-center justify-center px-1.75 border border-blue-600 group hover:bg-blue-600 cursor-pointer transition-colors">
+    <button
+        type="button"
+        (click)="goBack()"
+        aria-label="Go back"
+        class="flex items-center justify-center px-1.75 border border-blue-600 group hover:bg-blue-600 cursor-pointer transition-colors bg-transparent">
         <i-lucide class="text-blue-600 group-hover:text-white" name="chevron-left" [size]="24" [strokeWidth]="1" [absoluteStrokeWidth]="true">
         </i-lucide>
-    </div>
+    </button>
     }
 
     <!-- Header -->

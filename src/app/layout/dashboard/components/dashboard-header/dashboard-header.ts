@@ -1,5 +1,6 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { BookOpenCheck, ChevronLeft, CircleQuestionMark, GraduationCap, KeyRound, LUCIDE_ICONS, LucideAngularModule, LucideIconProvider, MessageCircle, UserRound } from 'lucide-angular';
 import { filter } from 'rxjs';
@@ -18,11 +19,14 @@ import { filter } from 'rxjs';
 export class DashboardHeader implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private location = inject(Location);
   private destroyRef = inject(DestroyRef);
 
   title = '';
   icon = '';
   showBack = false;
+
+  private internalNavigationCount = 0;
 
   ngOnInit() {
     this.router.events
@@ -30,9 +34,32 @@ export class DashboardHeader implements OnInit {
         filter(e => e instanceof NavigationEnd),
         takeUntilDestroyed(this.destroyRef)
       )
-      .subscribe(() => this.updateHeader());
+      .subscribe(() => {
+        this.internalNavigationCount++;
+        this.updateHeader();
+      });
 
     this.updateHeader();
+  }
+
+  goBack() {
+    if (this.internalNavigationCount > 1) {
+      this.location.back();
+      return;
+    }
+
+    const fallback = this.getParentUrl();
+    this.router.navigateByUrl(fallback);
+  }
+
+  private getParentUrl(): string {
+    const tree = this.router.parseUrl(this.router.url);
+    const segments = tree.root.children['primary']?.segments ?? [];
+    if (segments.length <= 1) {
+      return '/';
+    }
+    const parent = segments.slice(0, -1).map(s => s.path).join('/');
+    return '/' + parent;
   }
 
   private getDeepestRoute(route: ActivatedRoute): ActivatedRoute {
