@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { AuthInput } from '../../../../shared/ui/auth-input/auth-input';
 import { AuthService } from '../../../../../../projects/auth/src/lib/services/auth.service';
+import { UserRole } from '../../../../../../projects/auth/src/lib/enums/user-role';
 import { finalize } from 'rxjs';
 
 @Component({
@@ -67,15 +68,15 @@ export class LoginForm {
 
     this.authService.login(payload).pipe(finalize(() => this.isSubmitting = false))
       .subscribe((res) => {
-        // console.log(res);
         if (!res.token) {
           this.loginError = res.message || "Login failed";
           return;
         }
 
         sessionStorage.setItem('auth_token', res.token);
-        //to be updated navigation
-        this.router.navigate(['/auth/forgot-password']);
+        const role = res.user?.role;
+        const dashboardRoute = role === UserRole.ADMIN ? '/admin-dashboard' : '/user-dashboard';
+        this.router.navigateByUrl(dashboardRoute);
       });
   }
 
