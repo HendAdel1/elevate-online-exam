@@ -7,6 +7,8 @@ import { CommonModule } from '@angular/common';
 import { AuthInput } from '../../../../shared/ui/auth-input/auth-input';
 import { AuthService } from '../../../../../../projects/auth/src/lib/services/auth.service';
 import { UserRole } from '../../../../../../projects/auth/src/lib/enums/user-role';
+import { authSession } from '../../../../core/auth/auth-session';
+import { dashboardPathFor } from '../../../../core/auth/role-redirect';
 import { finalize } from 'rxjs';
 
 @Component({
@@ -69,14 +71,13 @@ export class LoginForm {
     this.authService.login(payload).pipe(finalize(() => this.isSubmitting = false))
       .subscribe((res) => {
         if (!res.token) {
-          this.loginError = res.message || "Login failed";
+          this.loginError = res.message || 'Login failed';
           return;
         }
 
-        sessionStorage.setItem('auth_token', res.token);
-        const role = res.user?.role;
-        const dashboardRoute = role === UserRole.ADMIN ? '/admin-dashboard' : '/user-dashboard';
-        this.router.navigateByUrl(dashboardRoute);
+        const role = res.user?.role === UserRole.ADMIN ? UserRole.ADMIN : UserRole.USER;
+        authSession.setSession(res.token, role);
+        this.router.navigateByUrl(dashboardPathFor(role));
       });
   }
 

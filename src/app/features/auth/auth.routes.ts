@@ -3,6 +3,7 @@ import { AuthLayout } from "../../layout/auth/auth-layout/auth-layout";
 import { userInfoAccessGuard } from './guards/user-info-access.guard';
 import { verifyOtpAccessGuard } from './guards/verify-otp-access.guard';
 import { createPasswordAccessGuard } from './guards/create-password-access.guard';
+import { guestOnlyGuard } from '../../core/guards/guest-only.guard';
 
 export const authRoutes: Routes = [
   {
@@ -16,6 +17,7 @@ export const authRoutes: Routes = [
       },
       {
         path: 'login',
+        canMatch: [guestOnlyGuard],
         loadComponent: () =>
           import('./pages/login/login').then((m) => m.Login),
       },
