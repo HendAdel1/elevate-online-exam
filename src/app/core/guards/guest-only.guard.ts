@@ -1,14 +1,15 @@
 import { inject } from '@angular/core';
 import { CanMatchFn, Router } from '@angular/router';
-import { authSession } from '../auth/auth-session';
+import { AuthState } from '../auth/auth-state';
 import { dashboardPathFor } from '../auth/role-redirect';
 
 export const guestOnlyGuard: CanMatchFn = () => {
   const router = inject(Router);
+  const auth = inject(AuthState);
 
-  if (!authSession.isAuthenticated()) {
+  if (!auth.isAuthenticated()) {
     return true;
   }
 
-  return router.createUrlTree([dashboardPathFor(authSession.getRole())]);
+  return router.createUrlTree([dashboardPathFor(auth.role())]);
 };

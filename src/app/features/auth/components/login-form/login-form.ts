@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { AuthInput } from '../../../../shared/ui/auth-input/auth-input';
 import { AuthService } from '../../../../../../projects/auth/src/lib/services/auth.service';
 import { UserRole } from '../../../../../../projects/auth/src/lib/enums/user-role';
-import { authSession } from '../../../../core/auth/auth-session';
+import { AuthState } from '../../../../core/auth/auth-state';
 import { dashboardPathFor } from '../../../../core/auth/role-redirect';
 import { finalize } from 'rxjs';
 
@@ -32,6 +32,7 @@ export class LoginForm {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private authState: AuthState,
     private router: Router
   ) {
     this.loginForm = this.fb.group({
@@ -70,14 +71,17 @@ export class LoginForm {
 
     this.authService.login(payload).pipe(finalize(() => this.isSubmitting = false))
       .subscribe((res) => {
-        if (!res.token) {
+        if (!res.token || !res.user) {
           this.loginError = res.message || 'Login failed';
           return;
         }
 
-        const role = res.user?.role === UserRole.ADMIN ? UserRole.ADMIN : UserRole.USER;
-        authSession.setSession(res.token, role);
-        this.router.navigateByUrl(dashboardPathFor(role));
+        const user = {
+          ...res.user,
+          role: res.user.role === UserRole.ADMIN ? UserRole.ADMIN : UserRole.USER,
+        };
+        this.authState.login(res.token, user);
+        this.router.navigateByUrl(dashboardPathFor(user.role));
       });
   }
 
