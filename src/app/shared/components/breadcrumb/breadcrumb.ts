@@ -57,7 +57,19 @@ export class Breadcrumb implements OnInit {
           label: resolved['exam'].title,
           url,
         });
-      } else if (label && label !== ':diploma' && label !== ':exam') {
+      } else if (label === ':diplomaAnswers') {
+        const diplomaTitle = this.getDiplomaTitleFromRoute(child);
+        this.addBreadcrumb(breadcrumbs, {
+          label: diplomaTitle ? `${diplomaTitle} Answers` : 'Answers',
+          url,
+          clickable: false,
+        });
+      } else if (
+        label &&
+        label !== ':diploma' &&
+        label !== ':exam' &&
+        label !== ':diplomaAnswers'
+      ) {
         this.addBreadcrumb(breadcrumbs, { label, url });
       }
 
@@ -65,6 +77,16 @@ export class Breadcrumb implements OnInit {
     }
 
     return breadcrumbs;
+  }
+
+  private getDiplomaTitleFromRoute(route: ActivatedRoute): string | undefined {
+    let r: ActivatedRoute | null = route;
+    while (r) {
+      const d = r.snapshot.data['diploma'] as { title?: string } | undefined;
+      if (d?.title?.trim()) return d.title.trim();
+      r = r.parent;
+    }
+    return undefined;
   }
 
   private addBreadcrumb(

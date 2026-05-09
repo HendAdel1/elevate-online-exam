@@ -2,7 +2,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { BookOpenCheck, ChevronLeft, CircleQuestionMark, GraduationCap, KeyRound, LUCIDE_ICONS, LucideAngularModule, LucideIconProvider, MessageCircle, UserRound } from 'lucide-angular';
+import {
+  BookOpenCheck,
+  ChevronLeft,
+  CircleQuestionMark,
+  GraduationCap,
+  KeyRound,
+  LUCIDE_ICONS,
+  LucideAngularModule,
+  LucideIconProvider,
+  MessageCircle,
+  UserRound,
+} from 'lucide-angular';
 import { filter } from 'rxjs';
 
 @Component({
@@ -10,11 +21,21 @@ import { filter } from 'rxjs';
   imports: [LucideAngularModule],
   templateUrl: './dashboard-header.html',
   styleUrl: './dashboard-header.css',
-  providers: [{
-    provide: LUCIDE_ICONS,
-    multi: true,
-    useValue: new LucideIconProvider({ GraduationCap, BookOpenCheck, CircleQuestionMark, MessageCircle, UserRound, KeyRound, ChevronLeft }),
-  }]
+  providers: [
+    {
+      provide: LUCIDE_ICONS,
+      multi: true,
+      useValue: new LucideIconProvider({
+        GraduationCap,
+        BookOpenCheck,
+        CircleQuestionMark,
+        MessageCircle,
+        UserRound,
+        KeyRound,
+        ChevronLeft,
+      }),
+    },
+  ],
 })
 export class DashboardHeader implements OnInit {
   private router = inject(Router);
@@ -31,8 +52,8 @@ export class DashboardHeader implements OnInit {
   ngOnInit() {
     this.router.events
       .pipe(
-        filter(e => e instanceof NavigationEnd),
-        takeUntilDestroyed(this.destroyRef)
+        filter((e) => e instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => {
         this.internalNavigationCount++;
@@ -53,13 +74,31 @@ export class DashboardHeader implements OnInit {
   }
 
   private getParentUrl(): string {
-    const tree = this.router.parseUrl(this.router.url);
-    const segments = tree.root.children['primary']?.segments ?? [];
-    if (segments.length <= 1) {
+    const path = this.router.url.split(/[?#]/, 1)[0];
+    const parts = path.split('/').filter(Boolean);
+    if (parts.length <= 1) {
       return '/';
     }
-    const parent = segments.slice(0, -1).map(s => s.path).join('/');
-    return '/' + parent;
+
+    const last = parts[parts.length - 1];
+    if (last === 'answers') {
+      parts.pop();
+      parts.pop();
+      return '/' + parts.join('/');
+    }
+    if (last === 'questions') {
+      parts.pop();
+      parts.pop();
+      return '/' + parts.join('/');
+    }
+    if (last === 'exams' && parts.length >= 3 && parts[parts.length - 3] === 'diplomas') {
+      parts.pop();
+      parts.pop();
+      return '/' + parts.join('/');
+    }
+
+    parts.pop();
+    return '/' + parts.join('/');
   }
 
   private getDeepestRoute(route: ActivatedRoute): ActivatedRoute {
@@ -103,7 +142,8 @@ export class DashboardHeader implements OnInit {
     }
 
     if (data.type === 'answers') {
-      return 'Answers';
+      const diploma = this.findResolved(current, 'diploma');
+      return diploma?.title ? `${diploma.title} Answers` : 'Answers';
     }
 
     return data.label || '';

@@ -38,17 +38,22 @@ export const userDashboardRoutes: Routes = [
             data: { breadcrumb: ':diploma' },
             children: [
               {
-                path: 'exams',
+                path: 'exams/:examId/questions/:questionId/answers',
                 data: {
-                  breadcrumb: 'Exams',
+                  breadcrumb: ':diplomaAnswers',
                   header: {
-                    icon: 'book-open-check',
-                    type: 'diplomaExams',
+                    icon: 'circle-question-mark',
+                    type: 'answers',
                     showBack: true,
                   },
                 },
                 loadComponent: () =>
-                  import('./pages/exams/exams').then((m) => m.Exams),
+                  import('./pages/answers/answers').then((m) => m.Answers),
+              },
+              {
+                path: 'exams/:examId/questions/:questionId',
+                redirectTo: 'exams/:examId/questions',
+                pathMatch: 'full',
               },
               {
                 path: 'exams/:examId/questions',
@@ -65,17 +70,22 @@ export const userDashboardRoutes: Routes = [
                   import('./pages/questions/questions').then((m) => m.Questions),
               },
               {
-                path: 'exams/:examId/questions/:questionId/answers',
+                path: 'exams/:examId',
+                redirectTo: 'exams',
+                pathMatch: 'full',
+              },
+              {
+                path: 'exams',
                 data: {
-                  breadcrumb: 'Answers',
+                  breadcrumb: 'Exams',
                   header: {
-                    icon: 'message-circle',
-                    type: 'answers',
+                    icon: 'book-open-check',
+                    type: 'diplomaExams',
                     showBack: true,
                   },
                 },
                 loadComponent: () =>
-                  import('./pages/answers/answers').then((m) => m.Answers),
+                  import('./pages/exams/exams').then((m) => m.Exams),
               },
             ],
           },
