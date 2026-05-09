@@ -1,9 +1,13 @@
 <nav aria-label="Breadcrumb" class="flex items-center text-sm">
-  <ol class="flex items-center space-x-2">
-    @for (item of breadcrumbs; track item.url; let last = $last) {
-      <li class="flex items-center pt-4 px-4">
+  <ol class="flex items-center px-4">
+    @for (item of breadcrumbs; track item.url + item.label; let last = $last) {
+      <li class="flex items-center pt-4">
         @if (!last) {
-          <a [routerLink]="item.url" class="font-geist text-sm text-gray-400 hover:text-blue-600 transition-colors">{{ item.label }}</a>
+          @if (item.clickable !== false) {
+            <a [routerLink]="item.url" class="font-geist text-sm text-gray-400 hover:text-blue-600 transition-colors">{{ item.label }}</a>
+          } @else {
+            <span class="font-geist text-sm text-gray-400">{{ item.label }}</span>
+          }
           <span class="mx-2 text-gray-400">/</span>
         } @else {
           <span class="font-geist text-sm text-blue-600">{{ item.label }}</span>

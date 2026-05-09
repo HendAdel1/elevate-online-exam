@@ -72,7 +72,6 @@ export class DashboardHeader implements OnInit {
   private updateHeader() {
     const current = this.getDeepestRoute(this.route);
     const data = current.snapshot.data['header'];
-    const params = current.snapshot.params;
 
     if (!data) {
       this.reset();
@@ -81,7 +80,7 @@ export class DashboardHeader implements OnInit {
 
     this.icon = data.icon;
     this.showBack = data.showBack ?? false;
-    this.title = this.getTitle(data, params);
+    this.title = this.getTitle(data);
   }
 
   private reset() {
@@ -90,13 +89,17 @@ export class DashboardHeader implements OnInit {
     this.showBack = false;
   }
 
-  private getTitle(data: any, params: any): string {
+  private getTitle(data: any): string {
+    const current = this.getDeepestRoute(this.route);
+    const diploma = this.findResolved(current, 'diploma');
+
     if (data.type === 'diplomaExams') {
-      return `Diploma ${params['diplomaId']} Exams`;
+      return diploma?.title ? `${diploma.title} Exams` : 'Exams';
     }
 
     if (data.type === 'examQuestions') {
-      return `Exam ${params['examId']} Questions`;
+      const exam = this.findResolved(current, 'exam');
+      return exam?.title ? `${exam.title} Questions` : 'Questions';
     }
 
     if (data.type === 'answers') {
@@ -104,5 +107,15 @@ export class DashboardHeader implements OnInit {
     }
 
     return data.label || '';
+  }
+
+  private findResolved(route: ActivatedRoute, key: string): any {
+    let r: ActivatedRoute | null = route;
+    while (r) {
+      const value = r.snapshot.data[key];
+      if (value) return value;
+      r = r.parent;
+    }
+    return null;
   }
 }

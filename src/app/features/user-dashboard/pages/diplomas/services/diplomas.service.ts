@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { GetDiplomasResponse } from '../models/diploma.interface';
+import { GetDiplomaResponse, GetDiplomasResponse } from '../models/diploma.interface';
 import { environment } from '../../../../../../environments/environment';
 
 export interface GetDiplomasParams {
@@ -24,6 +24,17 @@ export class DiplomasService {
         return this.http.get<GetDiplomasResponse>(
             `${environment.apiBaseUrl}/diplomas`,
             { params: httpParams }
+        );
+    }
+
+    getDiplomaById(id: string): Observable<GetDiplomaResponse> {
+        console.log('[Diploma Debug] getDiplomaById request', {
+            id,
+            url: `${environment.apiBaseUrl}/diplomas/${id}`,
+        });
+
+        return this.http.get<GetDiplomaResponse>(
+            `${environment.apiBaseUrl}/diplomas/${id}`
         );
     }
 }

@@ -1,21 +1,14 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterModule
-} from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
-
 export interface BreadcrumbItem {
   label: string;
   url: string;
+  clickable?: boolean;
 }
-
 @Component({
   selector: 'app-breadcrumb',
-  standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './breadcrumb.html',
   styleUrl: './breadcrumb.css',
@@ -51,17 +44,35 @@ export class Breadcrumb implements OnInit {
       }
 
       const label = child.snapshot.data['breadcrumb'];
+      const resolved = child.snapshot.data;
 
-      if (label) {
-        breadcrumbs.push({
-          label,
-          url
+      if (label === ':diploma' && resolved['diploma']?.title) {
+        this.addBreadcrumb(breadcrumbs, {
+          label: resolved['diploma'].title,
+          url,
+          clickable: false,
         });
+      } else if (label === ':exam' && resolved['exam']?.title) {
+        this.addBreadcrumb(breadcrumbs, {
+          label: resolved['exam'].title,
+          url,
+        });
+      } else if (label && label !== ':diploma' && label !== ':exam') {
+        this.addBreadcrumb(breadcrumbs, { label, url });
       }
 
       return this.buildBreadcrumb(child, url, breadcrumbs);
     }
 
     return breadcrumbs;
+  }
+
+  private addBreadcrumb(
+    breadcrumbs: BreadcrumbItem[],
+    item: BreadcrumbItem
+  ): void {
+    const last = breadcrumbs[breadcrumbs.length - 1];
+    if (last?.label === item.label && last.url === item.url) return;
+    breadcrumbs.push(item);
   }
 }

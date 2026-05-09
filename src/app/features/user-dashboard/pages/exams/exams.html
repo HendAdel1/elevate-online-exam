@@ -1,1 +1,98 @@
-<p>exams works!</p>
+<div class="pt-6 font-geist">
+
+  @if (exams().length || isLoading()) {
+
+  <div class="p-6 flex flex-col gap-4">
+
+    @for (exam of exams(); track exam.id) {
+
+    <div
+      class="cursor-pointer group bg-blue-50 border border-dashed border-transparent hover:border-blue-200 transition-colors p-4 flex flex-col sm:flex-row gap-4"
+    >
+
+      <!-- Image -->
+      <div class="p-4 w-24 h-24 border border-blue-300 shrink-0 flex items-center justify-center bg-blue-100">
+        <img [src]="exam.image" [alt]="exam.title" class="max-w-full max-h-full object-contain"/>
+      </div>
+
+      <!-- Content -->
+      <div class="flex-1 flex flex-col">
+
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-2 sm:gap-4">
+
+          <h3 class="text-blue-600 font-semibold text-xl tracking-tight">
+            {{ exam.title }}
+          </h3>
+
+          <div class="flex flex-wrap sm:flex-nowrap gap-3 text-sm text-gray-800">
+
+            <span class="flex items-center gap-1 whitespace-nowrap">
+              <i-lucide name="circle-help" [size]="16" [strokeWidth]="1.5" [absoluteStrokeWidth]="true"></i-lucide>
+              {{ exam.questionsCount }} Questions
+            </span>
+
+            <span class="flex items-center gap-1 whitespace-nowrap">
+              <i-lucide name="clock" [size]="16" [strokeWidth]="1.5" [absoluteStrokeWidth]="true"></i-lucide>
+              {{ exam.duration }} minutes
+            </span>
+
+          </div>
+
+        </div>
+
+        <!-- Description -->
+        <p #desc="appOverflow"appOverflow class="text-sm text-gray-500 line-clamp-2 flex-1">
+          {{ exam.description }}
+        </p>
+
+        <!-- Action -->
+        <div class="flex justify-end mt-2 min-h-8">
+
+          @if (desc.isOverflowing()) {
+          <a [routerLink]="['/user-dashboard/diplomas', diplomaId, 'exams', exam.id, 'questions']"
+            class="text-gray-800 text-sm hover:underline group-hover:hidden">
+            See More
+          </a>
+          }
+
+          <a
+            [routerLink]="['/user-dashboard/diplomas', diplomaId, 'exams', exam.id, 'questions']"
+            class="hidden group-hover:inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-1 transition-colors">
+            START
+            <i-lucide name="move-right"></i-lucide>
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    }
+
+  </div>
+
+  <!-- Sentinel -->
+  <div #sentinel class="mt-6"></div>
+
+  @if (isLoading()) {
+  <div class="flex justify-center py-6">
+    <p class="text-gray-500">Loading more exams...</p>
+  </div>
+  }
+
+  @if (!hasMore() && !isLoading()) {
+  <div class="flex justify-center py-6">
+    <p class="text-gray-500 text-sm">End of list</p>
+  </div>
+  }
+
+  } @else {
+
+  <div class="flex items-center justify-center py-20">
+    <p class="text-gray-500 text-lg">No exams found</p>
+  </div>
+
+  }
+
+</div>

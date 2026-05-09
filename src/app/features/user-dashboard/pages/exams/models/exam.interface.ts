@@ -1,18 +1,22 @@
-export interface Diploma {
+export interface Exam {
   id: string;
   title: string;
   description: string;
   image: string;
+  duration: number;
+  questionsCount: number;
+  diplomaId: string;
+  diploma: { id: string; title: string };
   immutable: boolean;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface GetDiplomasResponse {
+export interface GetExamsResponse {
   status: boolean;
   code: number;
   payload: {
-    data: Diploma[];
+    data: Exam[];
     metadata: {
       page: number;
       limit: number;
@@ -22,12 +26,14 @@ export interface GetDiplomasResponse {
   };
 }
 
-export interface GetDiplomaResponse {
+export interface GetExamResponse {
   status?: boolean;
   code?: number;
-  diploma?: Diploma;
-  payload?: Diploma | {
-    data?: Diploma;
-    diploma?: Diploma;
-  };
+  exam?: Exam;
+  payload?:
+    | Exam
+    | {
+        data?: Exam;
+        exam?: Exam;
+      };
 }
