@@ -1,1 +1,90 @@
-<p>answers works!</p>
+<div class="pt-6 pb-10 px-1 font-mono">
+  @if (isLoading()) {
+  <p class="text-gray-500 text-center py-12">Loading results…</p>
+  } @else if (loadError() || !submission()) {
+  <p class="text-gray-500 text-center py-12">Could not load submission results.</p>
+  } @else {
+  <div class="bg-white p-6 md:p-8">
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-3">
+      <p class="text-gray-600 text-sm md:text-base leading-relaxed">{{ headerLine() }}</p>
+      <p class="text-gray-500 text-sm whitespace-nowrap">
+        Question <span class="text-blue-600 font-bold">{{ totalQs() }}</span> of {{ totalQs() }}
+      </p>
+    </div>
+
+    <div class="mb-6 h-4 w-full bg-blue-600"></div>
+
+    <h2 class="text-xl md:text-2xl font-bold text-blue-600 mb-6">Results:</h2>
+
+    <div
+      class="grid grid-cols-1 lg:grid-cols-[minmax(0,32%)_minmax(0,1fr)] gap-6 lg:gap-8 items-stretch lg:h-[min(70vh,52rem)] lg:min-h-48">
+      <aside
+        class="border border-blue-200 bg-blue-50 p-6 md:p-8 flex items-center justify-center min-h-0 h-full w-full overflow-hidden">
+        <div class="flex flex-col items-center justify-center gap-6 w-full max-w-full">
+          <div class="relative size-44 md:size-48 shrink-0 rounded-full transition-[background] duration-300 ease-out"
+            [style.background]="donutBackground()">
+            <div class="absolute inset-9 flex items-center justify-center rounded-full bg-blue-50 shadow-sm"></div>
+          </div>
+          <div class="mx-auto w-max max-w-full text-left">
+            <div class="grid grid-cols-[auto_1fr] gap-x-3 gap-y-3 items-center text-sm text-black font-medium">
+              <span class="size-4 bg-emerald-500 shrink-0" aria-hidden="true"></span>
+              <span class="leading-normal">Correct: {{ submission()!.correctAnswers }}</span>
+              <span class="size-4 bg-red-500 shrink-0" aria-hidden="true"></span>
+              <span class="leading-normal">Incorrect: {{ submission()!.wrongAnswers }}</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="min-h-0 h-full w-full border border-dashed border-blue-200 bg-white p-1.5 overflow-y-auto">
+        <section aria-label="Question review">
+            @for (item of analytics(); track item.questionId) {
+            <div class="p-2.5">
+              <p class="font-semibold text-blue-600 text-xl md:text-lg mb-2.5">{{ item.questionText }}</p>
+              <div class="flex flex-col gap-2">
+                @for (block of displayAnswerBlocks(item); track $index) {
+                @if (block.kind === 'wrong') {
+                <div class="p-4 bg-red-50">
+                  <div class="flex items-start gap-3">
+                    <span
+                      class="mt-0.5 size-4 shrink-0 rounded-full bg-red-600 border border-red-600 shadow-[inset_0_0_0_2px_rgba(255,255,255,0.9)]"
+                      aria-hidden="true"></span>
+                    <span class="text-sm md:text-base text-gray-800 leading-relaxed flex-1">{{ block.text }}</span>
+                  </div>
+                </div>
+                } @else {
+                <div class="p-4 bg-emerald-50">
+                  <div class="flex items-start gap-3">
+                    <span class="mt-0.5 size-4 shrink-0 rounded-full border border-emerald-600 bg-emerald-50"
+                      aria-hidden="true"></span>
+                    <span class="text-sm md:text-base text-gray-800 leading-relaxed flex-1">{{ block.text }}</span>
+                  </div>
+                </div>
+                }
+                }
+              </div>
+            </div>
+            } @empty {
+            <p class="text-gray-500 text-sm">No question breakdown available.</p>
+            }
+        </section>
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-10">
+      <button type="button"
+        class="flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-4 text-sm font-medium bg-gray-200 text-gray-800 hover:bg-gray-300 cursor-pointer rounded-sm transition-colors"
+        (click)="restart()">
+        <i-lucide name="refresh-cw" class="size-4 shrink-0" aria-hidden="true"></i-lucide>
+        <span>Restart</span>
+      </button>
+      <button type="button"
+        class="flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-4 text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 cursor-pointer rounded-sm transition-colors"
+        (click)="explore()">
+        <i-lucide name="folder-search" class="size-4 shrink-0" aria-hidden="true"></i-lucide>
+        <span>Explore</span>
+      </button>
+    </div>
+  </div>
+  }
+</div>

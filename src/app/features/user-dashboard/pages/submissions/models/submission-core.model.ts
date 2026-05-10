@@ -1,14 +1,3 @@
-export interface SubmitExamAnswerItem {
-  questionId: string;
-  answerId: string;
-}
-
-export interface SubmitExamRequest {
-  examId: string;
-  answers: SubmitExamAnswerItem[];
-  startedAt: string;
-}
-
 export interface SubmissionExamSummary {
   id: string;
   title: string;
@@ -29,13 +18,4 @@ export interface Submission {
   submittedAt: string;
   createdAt: string;
   updatedAt: string;
-}
-
-export interface SubmitExamResponse {
-  status: boolean;
-  code: number;
-  payload: {
-    submission: Submission;
-    analytics?: unknown;
-  };
 }

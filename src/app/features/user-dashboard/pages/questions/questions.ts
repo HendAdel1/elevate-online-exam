@@ -4,9 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Diploma } from '../diplomas/models/diploma.interface';
 import { Exam } from '../exams/models/exam.interface';
 import { Question } from './models/question.interface';
-import { SubmitExamAnswerItem } from './models/submission.interface';
+import { SubmitExamAnswerItem } from '../submissions/models/submit-exam.models';
 import { QuestionsService } from './services/questions.service';
-import { SubmissionsService } from './services/submissions.service';
+import { SubmissionsService } from '../submissions/services/submissions.service';
 import {
   ChevronLeft,
   ChevronRight,
@@ -220,23 +220,27 @@ export class Questions implements OnInit {
       .submitExam({ examId: this.examId, answers, startedAt })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => {
+        next: (res) => {
           this.stopTimer();
           this.isSubmitting.set(false);
           const diploma = this.diplomaId;
           const questionId =
             this.currentQuestion()?.id ?? list[list.length - 1]?.id ?? '';
-          if (diploma && questionId) {
-            void this.router.navigate([
-              '/user-dashboard',
-              'diplomas',
-              diploma,
-              'exams',
-              this.examId,
-              'questions',
-              questionId,
-              'answers',
-            ]);
+          const submissionId = res.payload?.submission?.id;
+          if (diploma && questionId && submissionId) {
+            void this.router.navigate(
+              [
+                '/user-dashboard',
+                'diplomas',
+                diploma,
+                'exams',
+                this.examId,
+                'questions',
+                questionId,
+                'answers',
+              ],
+              { queryParams: { submissionId } },
+            );
           } else {
             void this.router.navigate(['/user-dashboard/diplomas']);
           }
