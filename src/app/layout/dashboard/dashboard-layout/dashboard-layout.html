@@ -2,8 +2,8 @@
   <app-toast-layer />
 
   <!-- Sidenav  - left side -->
-  <div class="w-90">
-    <app-sidenav [theme]="theme" [navLinks]="navLinks"></app-sidenav>
+  <div [class.w-90]="!isCollapsed" [class.w-20]="isCollapsed" class="transition-all duration-300">
+    <app-sidenav [theme]="theme" [navLinks]="navLinks" [isCollapsed]="isCollapsed" (toggle)="onToggle()"></app-sidenav>
   </div>
 
   <!-- Content - right side -->

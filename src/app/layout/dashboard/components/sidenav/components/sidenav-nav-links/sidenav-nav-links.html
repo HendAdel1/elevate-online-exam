@@ -2,7 +2,8 @@
   @for (link of links; track link.name) {
 
   <li [routerLink]="link.route" routerLinkActive #rla="routerLinkActive"
-    class="group flex items-center gap-5 p-4 mb-2.5 cursor-pointer border transition-colors hover:bg-blue-100 hover:border-blue-500"
+    class="group flex items-center p-4 mb-2.5 cursor-pointer border transition-all duration-300 hover:bg-blue-100 hover:border-blue-500"
+    [class.gap-5]="!isCollapsed" [class.gap-0]="isCollapsed" [class.justify-center]="isCollapsed"
     [class.bg-blue-100]="rla.isActive" [class.border-blue-500]="rla.isActive"
     [class.border-transparent]="!rla.isActive">
 
@@ -11,10 +12,12 @@
       [class.text-gray-500]="!rla.isActive">
     </i-lucide>
 
+    @if (!isCollapsed) {
     <p class="font-geist text-md transition-colors group-hover:text-blue-600" [class.text-blue-600]="rla.isActive"
       [class.text-gray-500]="!rla.isActive">
       {{ link.name }}
     </p>
+    }
 
   </li>
 

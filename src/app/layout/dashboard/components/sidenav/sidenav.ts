@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SidenavLogo } from "./components/sidenav-logo/sidenav-logo";
 import { SidenavNavLinks } from "./components/sidenav-nav-links/sidenav-nav-links";
 import { SidenavFooter } from "./components/sidenav-footer/sidenav-footer";
@@ -12,4 +12,6 @@ import { DashboardNavLink, DashboardTheme } from '../../dashboard.types';
 export class Sidenav {
   @Input() theme: DashboardTheme = 'light';
   @Input() navLinks: DashboardNavLink[] = [];
+  @Input() isCollapsed = false;
+  @Output() toggle = new EventEmitter<void>();
 }

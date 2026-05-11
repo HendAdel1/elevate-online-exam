@@ -19,4 +19,5 @@ export class SidenavNavLinks {
     { name: 'Diplomas', icon: 'graduation-cap', route: 'diplomas' },
     { name: 'Account Settings', icon: 'user-round', route: 'account-settings' }
   ];
+  @Input() isCollapsed = false;
 }

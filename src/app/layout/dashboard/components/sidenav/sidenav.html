@@ -1,12 +1,14 @@
-<div class="p-10 h-screen flex flex-col" [class.bg-blue-50]="theme === 'light'" [class.bg-gray-800]="theme === 'dark'">
+<div class="h-screen flex flex-col transition-all duration-300"
+    [class.p-10]="!isCollapsed" [class.p-4]="isCollapsed"
+    [class.bg-blue-50]="theme === 'light'" [class.bg-gray-800]="theme === 'dark'">
     <!-- Top 'sidenav logo & brand' -->
-    <app-sidenav-logo></app-sidenav-logo>
+    <app-sidenav-logo [isCollapsed]="isCollapsed" (toggle)="toggle.emit()"></app-sidenav-logo>
 
     <!-- Mid 'sidenav links' -->
     <div class="mt-15 flex-1">
-        <app-sidenav-nav-links [links]="navLinks"></app-sidenav-nav-links>
+        <app-sidenav-nav-links [links]="navLinks" [isCollapsed]="isCollapsed"></app-sidenav-nav-links>
     </div>
 
     <!-- Bottom profile 'sidenav footer' -->
-    <app-sidenav-footer></app-sidenav-footer>
+    <app-sidenav-footer [isCollapsed]="isCollapsed"></app-sidenav-footer>
 </div>

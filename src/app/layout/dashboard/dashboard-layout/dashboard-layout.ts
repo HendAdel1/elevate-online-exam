@@ -13,9 +13,14 @@ import { DashboardNavLink, DashboardTheme } from '../dashboard.types';
   styleUrl: './dashboard-layout.css',
 })
 export class DashboardLayout {
+  isCollapsed = false;
   @Input() theme: DashboardTheme = 'light';
   @Input() navLinks: DashboardNavLink[] = [
     { name: 'Diplomas', icon: 'graduation-cap', route: 'diplomas' },
     { name: 'Account Settings', icon: 'user-round', route: 'account-settings' }
   ];
+
+  onToggle() {
+    this.isCollapsed = !this.isCollapsed;
+  }
 }

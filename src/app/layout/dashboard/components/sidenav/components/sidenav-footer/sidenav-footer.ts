@@ -1,4 +1,4 @@
-import { Component, HostListener, computed, inject } from '@angular/core';
+import { Component, HostListener, computed, inject, Input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import {
   Bolt,
@@ -33,6 +33,7 @@ export class SidenavFooter {
   private readonly router = inject(Router);
 
   isOpen = false;
+  @Input() isCollapsed = false;
 
   readonly user = this.authState.user;
   readonly isAdmin = computed(() => this.authState.role() === UserRole.ADMIN);

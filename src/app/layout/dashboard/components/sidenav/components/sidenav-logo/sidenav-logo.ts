@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Brand } from "../../../../../../shared/components/brand/brand";
 
 @Component({
@@ -8,5 +8,6 @@ import { Brand } from "../../../../../../shared/components/brand/brand";
   styleUrl: './sidenav-logo.css',
 })
 export class SidenavLogo {
-
+  @Input() isCollapsed = false;
+  @Output() toggle = new EventEmitter<void>();
 }

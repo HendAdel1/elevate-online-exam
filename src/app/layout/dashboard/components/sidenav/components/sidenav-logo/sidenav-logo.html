@@ -1,2 +1,6 @@
-<img class="mb-2.5" src="images/logo-black.svg" alt="elevate logo">
-<app-brand></app-brand>
+<div class="cursor-pointer mb-2.5" (click)="toggle.emit()">
+    <img src="images/logo-black.svg" alt="elevate logo">
+    @if (!isCollapsed) {
+    <app-brand></app-brand>
+    }
+</div>
