@@ -43,6 +43,17 @@ export class Breadcrumb implements OnInit {
         url += `/${routeURL}`;
       }
 
+      const crumbItems = child.snapshot.data['breadcrumbItems'] as BreadcrumbItem[] | undefined;
+      if (crumbItems?.length) {
+        for (const it of crumbItems) {
+          this.addBreadcrumb(breadcrumbs, {
+            ...it,
+            url: it.url || url,
+          });
+        }
+        return this.buildBreadcrumb(child, url, breadcrumbs);
+      }
+
       const label = child.snapshot.data['breadcrumb'];
       const resolved = child.snapshot.data;
 

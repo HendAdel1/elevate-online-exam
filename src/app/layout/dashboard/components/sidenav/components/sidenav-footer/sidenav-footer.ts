@@ -1,5 +1,5 @@
 import { Component, HostListener, computed, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {
   Bolt,
   EllipsisVertical,
@@ -11,12 +11,13 @@ import {
 } from 'lucide-angular';
 import { AuthState } from '../../../../../../core/auth/auth-state';
 import { AUTH_LOGIN_PATH } from '../../../../../../core/auth/role-redirect';
+import { UserRole } from '../../../../../../../../projects/auth/src/lib/enums/user-role';
 
 const FALLBACK_AVATAR = 'images/logo-black.svg';
 
 @Component({
   selector: 'app-sidenav-footer',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, RouterLink],
   templateUrl: './sidenav-footer.html',
   styleUrl: './sidenav-footer.css',
   providers: [
@@ -34,6 +35,7 @@ export class SidenavFooter {
   isOpen = false;
 
   readonly user = this.authState.user;
+  readonly isAdmin = computed(() => this.authState.role() === UserRole.ADMIN);
   readonly displayName = computed(() => this.user()?.firstName?.trim() || 'Guest');
   readonly displayEmail = computed(() => this.user()?.email?.trim() || '');
   readonly avatarUrl = computed(() => this.user()?.profilePhoto?.trim() || FALLBACK_AVATAR);

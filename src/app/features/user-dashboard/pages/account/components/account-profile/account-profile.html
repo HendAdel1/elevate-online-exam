@@ -1,0 +1,78 @@
+@if (loadError()) {
+<p class="text-red-600 border border-red-100 bg-red-50 px-4 py-3">
+  We could not load your profile. Refresh the page or try again later.
+</p>
+} @else {
+<section class="h-full min-h-0 flex-1 overflow-y-auto bg-white p-6 sm:p-8 lg:p-10">
+  <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="space-y-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <app-auth-input label="First name" placeholder="First name" [required]="false" [control]="formControls.firstName"
+        [errorMap]="{
+            required: 'First name is required.',
+            minlength: 'Must be at least 2 characters.'
+          }" />
+      <app-auth-input label="Last name" placeholder="Last name" [required]="false" [control]="formControls.lastName"
+        [errorMap]="{
+            required: 'Last name is required.',
+            minlength: 'Must be at least 2 characters.'
+          }" />
+    </div>
+
+    <app-auth-input label="Username" placeholder="Username" [disabled]="true" [control]="formControls.username" />
+
+    <div class="w-full">
+      <div class="flex items-center justify-between gap-3 mb-2">
+        <label class="block text-md font-medium text-gray-800" for="account-email-input">
+          Email
+        </label>
+        <button type="button" (click)="openChangeEmail()"
+          class="inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:opacity-90 shrink-0 cursor-pointer">
+          <lucide-icon name="pencil-line" class="w-4 h-4" />
+          Change
+        </button>
+      </div>
+      <input id="account-email-input" type="email" autocomplete="email"
+        class="w-full border border-gray-200 bg-white px-4 py-3 text-gray-600 cursor-not-allowed focus:outline-none"
+        [formControl]="formControls.email" />
+    </div>
+
+    <div>
+      <label class="block text-md font-medium text-gray-800 mb-2">
+        Phone
+      </label>
+      <div class="w-full [&_.iti]:w-full [&_.iti__tel-input]:w-full">
+        <input #phoneInput formControlName="phone" type="tel" placeholder="1012345678" ngxPhoneField
+          [ngxPhoneFieldParams]="params" (blur)="formControls.phone.markAsTouched()"
+          class="d-block w-full border border-gray-200 px-4 py-3 focus:outline-none placeholder:text-gray-400"
+          [class.border-red-500]="formControls.phone.invalid && formControls.phone.touched" />
+      </div>
+      <div class="h-5 mt-1">
+        @if (phoneErrorMessage) {
+        <p class="text-red-600 text-sm mt-1">{{ phoneErrorMessage }}</p>
+        }
+      </div>
+    </div>
+
+    <div
+      class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 pt-6 mt-2 border-t border-gray-100">
+      <button type="button" (click)="openDeleteModal()"
+        class="w-full  py-3.5 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 transition-colors cursor-pointer">
+        Delete My Account
+      </button>
+      <button type="submit" [disabled]="saving() || !hasUnsavedChanges()"
+        class="w-full py-3.5 text-sm font-medium text-white bg-blue-600 hover:opacity-95 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">
+        Save Changes
+      </button>
+    </div>
+  </form>
+</section>
+}
+
+<app-request-email-change-modal [open]="requestEmailModalOpen()" [initialEmail]="pendingVerifyEmailChange()"
+  (closed)="closeRequestEmailModal()" (emailRequestSuccess)="onEmailChangeRequested($event)" />
+
+<app-verify-email-change-otp-modal [open]="verifyEmailOtpModalOpen()" [pendingEmail]="pendingVerifyEmailChange()"
+  (closed)="closeVerifyEmailOtpModal()" (editRequested)="onEditEmailFromOtp()"
+  (emailConfirmed)="onEmailConfirmed($event)" />
+
+<app-delete-account-modal [open]="deleteModalOpen()" (closed)="closeDeleteModal()" />

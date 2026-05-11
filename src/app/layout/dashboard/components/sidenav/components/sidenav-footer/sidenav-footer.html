@@ -29,16 +29,20 @@
   [class.scale-100]="isOpen"
   [class.pointer-events-none]="!isOpen"
 >
-    <li class="flex items-center gap-1 p-4 cursor-pointer group transition-colors hover:bg-blue-100">
+    <li class="flex items-center gap-1 p-4 cursor-pointer group transition-colors hover:bg-blue-100"
+      routerLink="/user-dashboard/account-settings/change-password">
         <i-lucide class="text-gray-500 transition-colors group-hover:text-blue-500" name="user-round" [size]="18" [strokeWidth]="1" [absoluteStrokeWidth]="true"></i-lucide>
         <p class="text-gray-800 text-sm transition-colors group-hover:text-blue-500">Account</p>
     </li>
-    <li class="flex items-center gap-1 p-4 cursor-pointer group transition-colors hover:bg-blue-100">
+    @if(isAdmin()){
+    <li class="flex items-center gap-1 p-4 cursor-pointer group transition-colors hover:bg-blue-100"
+      routerLink="/admin-dashboard">
         <i-lucide class="text-gray-500 transition-colors group-hover:text-blue-500" name="bolt" [size]="18" [strokeWidth]="1" [absoluteStrokeWidth]="true"></i-lucide>
         <p class="text-gray-800 text-sm transition-colors group-hover:text-blue-500">Dashboard</p>
     </li>
+    }
     <li (click)="logout()" class="flex items-center gap-1 p-4 cursor-pointer group transition-colors hover:bg-red-100">
-        <i-lucide class="text-red-600 group-hover:text-red-600" name="log-out" [size]="18" [strokeWidth]="1" [absoluteStrokeWidth]="true"></i-lucide>
+        <i-lucide class="text-red-600 group-hover:text-red-600 -rotate-90" name="log-out" [size]="18" [strokeWidth]="1" [absoluteStrokeWidth]="true"></i-lucide>
         <p class="text-red-600 text-sm group-hover:text-red-600">Logout</p>
     </li>
 </ul>

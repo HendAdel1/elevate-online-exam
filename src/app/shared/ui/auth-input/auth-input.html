@@ -1,40 +1,31 @@
 <div class="w-full">
-  <label class="block text-md font-medium text-gray-800 mb-2">
+  <label class="block text-md font-geist font-medium text-gray-800 mb-2">
     {{ label }}
     @if (required) {
-      <span class="text-red-600 ml-0.5">*</span>
+    <span class="text-red-600 ml-0.5">*</span>
     }
   </label>
 
   <div class="relative">
     @if (useContent) {
-      <ng-content></ng-content>
+    <ng-content></ng-content>
     } @else {
-      <input
-        [type]="type"
-        [placeholder]="placeholder"
-        [value]="control?.value ?? ''"
-        (input)="onInput($event)"
-        (blur)="control?.markAsTouched()"
-        [class]="inputClasses"
-      />
+    <input [type]="type" [placeholder]="placeholder" [value]="control?.value ?? ''" (input)="onInput($event)"
+      (blur)="control?.markAsTouched()" [disabled]="isDisabled" [readOnly]="readonly" [class]="inputClasses" />
     }
 
     @if (rightIcon) {
-      <span
-        class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 "
-        (click)="onRightIconClick()"
-      >
-        <ng-content select="[rightIcon]"></ng-content>
-      </span>
+    <span class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 " (click)="onRightIconClick()">
+      <ng-content select="[rightIcon]"></ng-content>
+    </span>
     }
   </div>
 
   <div class="h-5 mt-1">
     @if (errorMessage) {
-      <p class="text-red-600 text-sm">
-        {{ errorMessage }}
-      </p>
+    <p class="text-red-600 text-sm">
+      {{ errorMessage }}
+    </p>
     }
   </div>
 </div>

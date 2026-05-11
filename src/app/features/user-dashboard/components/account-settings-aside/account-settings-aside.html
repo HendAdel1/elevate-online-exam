@@ -1,0 +1,24 @@
+<aside class="flex w-full flex-1 flex-col bg-white lg:w-72 overflow-y-auto">
+  <nav class="flex flex-col flex-1 gap-1 p-4" aria-label="Account settings">
+    <a [routerLink]="profileLink" routerLinkActive="bg-blue-50 !text-blue-600"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="group flex items-center gap-3 px-4 py-3 font-geist text-base text-gray-500 transition-colors hover:bg-gray-50">
+      <lucide-icon name="user-circle" class="size-6" [strokeWidth]="1" [absoluteStrokeWidth]="true"/>
+      Profile
+    </a>
+    <a [routerLink]="changePasswordLink" routerLinkActive="bg-blue-50 !text-blue-600"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="group flex items-center gap-3 px-4 py-3 font-geist text-base text-gray-500 transition-colors hover:bg-blue-50">
+      <lucide-icon name="lock" class="size-6" [strokeWidth]="1" [absoluteStrokeWidth]="true" />
+      Change Password
+    </a>
+  </nav>
+
+  <div class="p-4">
+    <button type="button" (click)="logout()"
+      class="flex w-full items-center gap-3 bg-red-50 px-4 py-3 font-geist text-base text-red-600 transition-colors hover:bg-red-100 cursor-pointer">
+      <lucide-icon name="log-out" class="size-5 shrink-0 -rotate-90" [strokeWidth]="1" [absoluteStrokeWidth]="true"  />
+      Logout
+    </button>
+  </div>
+</aside>

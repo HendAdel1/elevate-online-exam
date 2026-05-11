@@ -1,0 +1,87 @@
+@if (open) {
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="request-email-change-title"
+    (click)="$event.target === $event.currentTarget && close()"
+  >
+    <div
+      class="relative w-full max-w-xl rounded-none bg-white"
+      (click)="$event.stopPropagation()"
+    >
+      <button
+        type="button"
+        class="absolute right-4 top-4 z-10 cursor-pointer p-1 text-gray-400 transition-colors hover:text-gray-600"
+        (click)="close()"
+        aria-label="Close"
+      >
+        <lucide-icon name="x" class="size-4" />
+      </button>
+
+      <div class="pr-14 pl-8 pt-8">
+        <div class="flex w-full items-center gap-0">
+          <div class="relative flex h-7 w-7 shrink-0 items-center justify-center">
+            <div class="absolute h-5 w-5 rotate-45 bg-blue-100"></div>
+            <div class="relative h-2 w-2 rotate-45 bg-blue-600"></div>
+          </div>
+          <div class=" min-h-0 min-w-12 flex-1 border-t border-dashed border-blue-600"></div>
+          <div class="h-2 w-2 shrink-0 rotate-45 border border-blue-600 bg-white"></div>
+        </div>
+
+        <h2 id="request-email-change-title" class="font-inter mt-5 text-3xl font-bold text-gray-800">
+          Change Email
+        </h2>
+      </div>
+
+      <div class="px-8 pb-2 pt-4">
+        <p class="font-inter my-7.5 text-2xl font-bold text-blue-600">Enter your new email</p>
+
+        <form
+          id="request-email-change-form"
+          [formGroup]="emailForm"
+          (ngSubmit)="submitNewEmail()"
+          class="space-y-4"
+        >
+          <div>
+            <label class="mb-2 block font-geist text-base font-medium text-gray-800" for="request-new-email"
+              >Email</label
+            >
+            <input
+              id="request-new-email"
+              type="email"
+              formControlName="newEmail"
+              placeholder="user@example.com"
+              class="w-full rounded-none border border-gray-200 px-4 py-3 placeholder:text-gray-400 focus:border-blue-600 focus:outline-none"
+              [class.border-red-500]="emailForm.controls.newEmail.invalid && emailForm.controls.newEmail.touched"
+            />
+            @if (emailForm.controls.newEmail.touched && emailForm.controls.newEmail.hasError('required')) {
+              <p class="mt-1 text-sm text-red-600">Email is required.</p>
+            }
+            @if (emailForm.controls.newEmail.touched && emailForm.controls.newEmail.hasError('email')) {
+              <p class="mt-1 text-sm text-red-600">Enter a valid email address.</p>
+            }
+          </div>
+
+          @if (apiMessage) {
+            <p class="text-sm text-red-600">{{ apiMessage }}</p>
+          }
+        </form>
+      </div>
+
+      <div class="border-t border-gray-200">
+        <div class="px-8 py-5">
+          <button
+            type="submit"
+            form="request-email-change-form"
+            [disabled]="submitting"
+            class="flex h-14 w-full items-center justify-center gap-2 rounded-none bg-blue-600 font-geist font-normal text-white hover:opacity-95 disabled:opacity-60"
+          >
+            Next
+            <lucide-icon name="chevron-right" class="size-4 text-white" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

@@ -95,21 +95,33 @@ export const userDashboardRoutes: Routes = [
         path: 'account-settings',
         data: {
           breadcrumb: 'Account',
-          header: { icon: 'user-round', label: 'Account Settings', showBack: true },
         },
         loadComponent: () =>
-          import('./pages/account/account').then((m) => m.Account),
-      },
-      {
-        path: 'change-password',
-        data: {
-          breadcrumb: 'Change Password',
-          header: { icon: 'key-round', label: 'Account Settings', showBack: true },
-        },
-        loadComponent: () =>
-          import('./pages/change-password/change-password').then(
-            (m) => m.ChangePassword
+          import('./pages/account/layout/account-settings-layout/account-settings-layout').then(
+            (m) => m.AccountSettingsLayout
           ),
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            data: {
+              header: { icon: 'user-round', label: 'Account Settings', showBack: true },
+            },
+            loadComponent: () =>
+              import('./pages/account/components/account-profile/account-profile').then((m) => m.AccountProfile),
+          },
+          {
+            path: 'change-password',
+            data: {
+              breadcrumb: 'Change Password',
+              header: { icon: 'user-round', label: 'Account Settings', showBack: true },
+            },
+            loadComponent: () =>
+              import('./pages/change-password/change-password').then(
+                (m) => m.ChangePassword
+              ),
+          },
+        ],
       },
     ],
   },
