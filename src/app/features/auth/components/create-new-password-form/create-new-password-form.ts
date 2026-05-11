@@ -150,6 +150,7 @@ export class CreateNewPasswordForm {
       .pipe(finalize(() => this.isSubmitting = false))
       .subscribe({
         next: () => {
+          sessionStorage.removeItem('auth_forgot_password_email');
           this.router.navigate(['/auth/login']);
         },
         error: (err) => {

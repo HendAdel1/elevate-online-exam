@@ -4,6 +4,8 @@ import { userInfoAccessGuard } from './guards/user-info-access.guard';
 import { verifyOtpAccessGuard } from './guards/verify-otp-access.guard';
 import { createPasswordAccessGuard } from './guards/create-password-access.guard';
 import { guestOnlyGuard } from '../../core/guards/guest-only.guard';
+import { forgotPasswordAccessGuard } from './guards/forgot-password-access.guard';
+import { createNewPasswordAccessGuard } from './guards/create-new-password-access.guard';
 
 export const authRoutes: Routes = [
   {
@@ -59,11 +61,13 @@ export const authRoutes: Routes = [
       },
       {
         path: 'verify-email',
+        canActivate: [forgotPasswordAccessGuard],
         loadComponent: () =>
           import('./pages/verify-email/verify-email').then((m) => m.VerifyEmail),
       },
       {
         path: 'create-new-password',
+        canActivate: [createNewPasswordAccessGuard],
         loadComponent: () =>
           import('./pages/create-new-password/create-new-password').then((m) => m.CreateNewPassword),
       },
