@@ -8,9 +8,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../../../../projects/auth/src/lib/services/auth.service';
 import { ResetPasswordRequest } from '../../../../../../projects/auth/src/lib/models/requests/reset-password.request';
 import { finalize } from 'rxjs';
+import { AuthError } from '../../../../shared/ui/auth-error/auth-error';
 @Component({
   selector: 'app-create-new-password-form',
-  imports: [LucideAngularModule, AuthButton, AuthInput, ReactiveFormsModule],
+  imports: [LucideAngularModule, AuthButton, AuthInput, ReactiveFormsModule, AuthError],
   templateUrl: './create-new-password-form.html',
   styleUrl: './create-new-password-form.css',
   providers: [{

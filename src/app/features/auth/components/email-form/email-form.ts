@@ -5,6 +5,7 @@ import { finalize } from 'rxjs';
 import { AuthButton } from "../../../../shared/ui/auth-button/auth-button";
 import { AuthService } from '../../../../../../projects/auth/src/lib/services/auth.service';
 import { setBoolean } from '../../utils/storage.util';
+import { AuthError } from '../../../../shared/ui/auth-error/auth-error';
 
 const VERIFY_EMAIL_STORAGE_KEY = 'auth_verify_email';
 const USER_INFO_ACCESS_STORAGE_KEY = 'auth_user_info_access';
@@ -13,7 +14,7 @@ const CREATE_PASSWORD_ACCESS_STORAGE_KEY = 'auth_create_password_access';
 @Component({
   selector: 'app-email-form',
   standalone: true,
-  imports: [ReactiveFormsModule, AuthButton],
+  imports: [ReactiveFormsModule, AuthButton, AuthError],
   templateUrl: './email-form.html',
   styleUrl: './email-form.css',
 })

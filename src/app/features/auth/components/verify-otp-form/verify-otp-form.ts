@@ -4,13 +4,14 @@ import { Router, RouterModule } from '@angular/router';
 import { finalize } from 'rxjs';
 import { AuthService } from '../../../../../../projects/auth/src/lib/services/auth.service';
 import { setBoolean } from '../../utils/storage.util';
+import { AuthError } from '../../../../shared/ui/auth-error/auth-error';
 
 const VERIFY_EMAIL_STORAGE_KEY = 'auth_verify_email';
 const USER_INFO_ACCESS_STORAGE_KEY = 'auth_user_info_access';
 
 @Component({
   selector: 'app-verify-otp-form',
-  imports: [AuthButton, RouterModule],
+  imports: [AuthButton, RouterModule, AuthError],
   templateUrl: './verify-otp-form.html',
   styleUrl: './verify-otp-form.css',
 })

@@ -8,6 +8,7 @@ import { AuthService } from '../../../../../../projects/auth/src/lib/services/au
 import { RegisterRequest } from '../../../../../../projects/auth/src/lib/models/requests/register.request';
 import { setBoolean } from '../../utils/storage.util';
 import { passwordValidator, passwordMatchValidator } from '../../validators/password.validator';
+import { AuthError } from '../../../../shared/ui/auth-error/auth-error';
 
 const USER_INFO_STORAGE_KEY = 'auth_user_info';
 const VERIFY_EMAIL_STORAGE_KEY = 'auth_verify_email';
@@ -16,7 +17,7 @@ const CREATE_PASSWORD_ACCESS_STORAGE_KEY = 'auth_create_password_access';
 
 @Component({
   selector: 'app-create-password-form',
-  imports: [LucideAngularModule, AuthButton, ReactiveFormsModule],
+  imports: [LucideAngularModule, AuthButton, ReactiveFormsModule, AuthError],
   templateUrl: './create-password-form.html',
   styleUrl: './create-password-form.css',
   providers:[{ 

@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthInput } from '../../../../shared/ui/auth-input/auth-input';
+import { AuthError } from '../../../../shared/ui/auth-error/auth-error';
 import { AuthService } from '../../../../../../projects/auth/src/lib/services/auth.service';
 import { UserRole } from '../../../../../../projects/auth/src/lib/enums/user-role';
 import { AuthState } from '../../../../core/auth/auth-state';
@@ -13,7 +14,7 @@ import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-login-form',
-  imports: [AuthButton, LucideAngularModule, RouterLink, ReactiveFormsModule, CommonModule, AuthInput],
+  imports: [AuthButton, LucideAngularModule, RouterLink, ReactiveFormsModule, CommonModule, AuthInput, AuthError],
   templateUrl: './login-form.html',
   styleUrl: './login-form.css',
   providers: [{

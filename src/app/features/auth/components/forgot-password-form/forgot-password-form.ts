@@ -5,10 +5,11 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../../../../../projects/auth/src/lib/services/auth.service';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
+import { AuthError } from '../../../../shared/ui/auth-error/auth-error';
 
 @Component({
   selector: 'app-forgot-password-form',
-  imports: [AuthButton, AuthInput, ReactiveFormsModule],
+  imports: [AuthButton, AuthInput, ReactiveFormsModule, AuthError],
   templateUrl: './forgot-password-form.html',
   styleUrl: './forgot-password-form.css',
 })

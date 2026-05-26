@@ -20,10 +20,11 @@ import { finalize } from 'rxjs';
 import { ToastService } from '../../../../core/services/toast.service';
 import { AccountProfileService } from '../account/services/account-profile.service';
 import { passwordMatchValidator } from '../../../auth/validators/password.validator';
+import { AuthError } from '../../../../shared/ui/auth-error/auth-error';
 
 @Component({
   selector: 'app-change-password',
-  imports: [ReactiveFormsModule, LucideAngularModule],
+  imports: [ReactiveFormsModule, LucideAngularModule, AuthError],
   templateUrl: './change-password.html',
   styleUrl: './change-password.css',
   host: {
