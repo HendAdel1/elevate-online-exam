@@ -7,21 +7,12 @@ import { finalize } from 'rxjs';
 import { AuthService } from '../../../../../../projects/auth/src/lib/services/auth.service';
 import { RegisterRequest } from '../../../../../../projects/auth/src/lib/models/requests/register.request';
 import { setBoolean } from '../../utils/storage.util';
-import { passwordValidator } from '../../validators/password.validator';
+import { passwordValidator, passwordMatchValidator } from '../../validators/password.validator';
 
 const USER_INFO_STORAGE_KEY = 'auth_user_info';
 const VERIFY_EMAIL_STORAGE_KEY = 'auth_verify_email';
 const USER_INFO_ACCESS_STORAGE_KEY = 'auth_user_info_access';
 const CREATE_PASSWORD_ACCESS_STORAGE_KEY = 'auth_create_password_access';
-
-const passwordMatchValidator = (group: AbstractControl): ValidationErrors | null => {
-  const password = group.get('password')?.value;
-  const confirmPassword = group.get('confirmPassword')?.value;
-
-  if (!password || !confirmPassword) return null;
-
-  return password === confirmPassword ? null : { passwordMismatch: true };
-};
 
 @Component({
   selector: 'app-create-password-form',
@@ -57,7 +48,7 @@ export class CreatePasswordForm implements OnInit, OnDestroy {
         password: ['', [Validators.required, passwordValidator()]],
         confirmPassword: ['', [Validators.required]],
       },
-      { validators: passwordMatchValidator }
+      { validators: passwordMatchValidator() }
     );
 
     this.controls = this.registerForm.controls;

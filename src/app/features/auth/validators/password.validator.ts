@@ -1,4 +1,4 @@
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export const passwordValidator = (): ValidatorFn => {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -19,5 +19,51 @@ export const passwordValidator = (): ValidatorFn => {
     if (!hasSpecialChar) errors['specialChar'] = true;
 
     return Object.keys(errors).length ? errors : null;
+  };
+};
+
+export const passwordMatchValidator = (
+  passwordKey: string = 'password',
+  confirmPasswordKey: string = 'confirmPassword',
+  errorKey: string = 'passwordMismatch'
+): ValidatorFn => {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const group = control as FormGroup;
+    const password = group.get(passwordKey);
+    const confirmPassword = group.get(confirmPasswordKey);
+
+    if (!password || !confirmPassword) return null;
+
+    const passwordValue = password.value?.trim?.() ?? password.value ?? '';
+    const confirmPasswordValue = confirmPassword.value?.trim?.() ?? confirmPassword.value ?? '';
+
+    // If either field is empty, don't flag mismatch yet
+    if (!passwordValue || !confirmPasswordValue) {
+      if (confirmPassword.errors) {
+        delete confirmPassword.errors[errorKey];
+        if (Object.keys(confirmPassword.errors).length === 0) {
+          confirmPassword.setErrors(null);
+        }
+      }
+      return null;
+    }
+
+    const mismatch = passwordValue !== confirmPasswordValue;
+
+    if (mismatch) {
+      confirmPassword.setErrors({
+        ...(confirmPassword.errors || {}),
+        [errorKey]: true,
+      });
+      return { [errorKey]: true };
+    } else {
+      if (confirmPassword.errors) {
+        delete confirmPassword.errors[errorKey];
+        if (Object.keys(confirmPassword.errors).length === 0) {
+          confirmPassword.setErrors(null);
+        }
+      }
+      return null;
+    }
   };
 };

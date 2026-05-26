@@ -1,4 +1,4 @@
-import { passwordValidator } from './../../validators/password.validator';
+import { passwordValidator, passwordMatchValidator } from './../../validators/password.validator';
 import { Component } from '@angular/core';
 import { Eye, EyeOff, LUCIDE_ICONS, LucideAngularModule, LucideIconProvider } from 'lucide-angular';
 import { AuthButton } from '../../../../shared/ui/auth-button/auth-button';
@@ -8,33 +8,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../../../../projects/auth/src/lib/services/auth.service';
 import { ResetPasswordRequest } from '../../../../../../projects/auth/src/lib/models/requests/reset-password.request';
 import { finalize } from 'rxjs';
-
-
-const passwordMatchValidator = (group: AbstractControl): ValidationErrors | null => {
-  const password = group.get('password');
-  const confirmPassword = group.get('confirmPassword');
-
-  if (!password || !confirmPassword) return null;
-
-  const mismatch = password.value !== confirmPassword.value;
-
-  if (mismatch) {
-    confirmPassword.setErrors({
-      ...(confirmPassword.errors || {}),
-      passwordMismatch: true,
-    });
-  } else {
-    if (confirmPassword.errors) {
-      delete confirmPassword.errors['passwordMismatch'];
-
-      if (Object.keys(confirmPassword.errors).length === 0) {
-        confirmPassword.setErrors(null);
-      }
-    }
-  }
-
-  return null;
-};
 @Component({
   selector: 'app-create-new-password-form',
   imports: [LucideAngularModule, AuthButton, AuthInput, ReactiveFormsModule],
@@ -65,7 +38,7 @@ export class CreateNewPasswordForm {
       password: ['', [Validators.required, passwordValidator()]],
       confirmPassword: ['', Validators.required],
     },
-      { validators: passwordMatchValidator });
+      { validators: passwordMatchValidator() });
 
     this.route.queryParamMap.subscribe(params => {
       this.token = params.get('token') ?? '';

@@ -19,13 +19,7 @@ import {
 import { finalize } from 'rxjs';
 import { ToastService } from '../../../../core/services/toast.service';
 import { AccountProfileService } from '../account/services/account-profile.service';
-
-function passwordsMatch(group: AbstractControl): ValidationErrors | null {
-  const newPw = group.get('newPassword')?.value?.trim?.() ?? '';
-  const confirm = group.get('confirmPassword')?.value?.trim?.() ?? '';
-  if (!confirm.length) return null;
-  return newPw === confirm ? null : { mismatch: true };
-}
+import { passwordMatchValidator } from '../../../auth/validators/password.validator';
 
 @Component({
   selector: 'app-change-password',
@@ -67,7 +61,7 @@ export class ChangePassword implements OnInit {
       newPassword: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', Validators.required],
     },
-    { validators: [passwordsMatch] }
+    { validators: [passwordMatchValidator('newPassword', 'confirmPassword', 'mismatch')] }
   );
 
   ngOnInit(): void {
