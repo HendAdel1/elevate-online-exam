@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   ElementRef,
   Injector,
   OnDestroy,
@@ -9,6 +10,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import type { Iti } from 'intl-tel-input';
 import intlTelInput from 'intl-tel-input';
@@ -59,6 +61,7 @@ export class AccountProfile implements OnInit, OnDestroy {
   private readonly authState = inject(AuthState);
   private readonly toast = inject(ToastService);
   private readonly injector = inject(Injector);
+  private readonly destroyRef = inject(DestroyRef);
 
   @ViewChild('phoneInput') phoneInput?: ElementRef<HTMLInputElement>;
 
@@ -124,8 +127,10 @@ export class AccountProfile implements OnInit, OnDestroy {
     merge(
       this.formControls.firstName.valueChanges,
       this.formControls.lastName.valueChanges,
-      this.formControls.phone.valueChanges
-    ).subscribe(() => this.recomputeDirty());
+      this.formControls.phone.valueChanges,
+    )
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.recomputeDirty());
   }
 
   ngOnDestroy(): void {
@@ -197,7 +202,10 @@ export class AccountProfile implements OnInit, OnDestroy {
     this.saving.set(true);
     this.accountProfile
       .updateProfile(payload)
-      .pipe(finalize(() => this.saving.set(false)))
+      .pipe(
+        finalize(() => this.saving.set(false)),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe({
         next: (user) => {
           this.currentUser = user;
@@ -210,7 +218,10 @@ export class AccountProfile implements OnInit, OnDestroy {
   }
 
   private loadProfile(): void {
-    this.accountProfile.getProfile().subscribe({
+    this.accountProfile
+      .getProfile()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: (user) => {
         this.currentUser = user;
         this.profileForm.patchValue({

@@ -1,4 +1,5 @@
-import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren, signal } from '@angular/core';
+import { Component, DestroyRef, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthButton } from '../../../../shared/ui/auth-button/auth-button';
 import { Router, RouterModule } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -17,6 +18,7 @@ import { AuthError } from '../../../../shared/ui/auth-error/auth-error';
   styleUrl: './verify-otp-form.css',
 })
 export class VerifyOtpForm implements OnInit, OnDestroy {
+  private readonly destroyRef = inject(DestroyRef);
 
   // Timer
   remainingSeconds = 60;
@@ -137,7 +139,7 @@ export class VerifyOtpForm implements OnInit, OnDestroy {
     this.isSubmitting.set(true);
 
     this.authService.verifyEmail({ email: this.email, code })
-      .pipe(finalize(() => this.isSubmitting.set(false)))
+      .pipe(finalize(() => this.isSubmitting.set(false)), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
           this.successMessage.set(res.message || 'Verified');
@@ -161,7 +163,7 @@ export class VerifyOtpForm implements OnInit, OnDestroy {
     this.isSubmitting.set(true);
 
     this.authService.sendEmail({ email: this.email })
-      .pipe(finalize(() => this.isSubmitting.set(false)))
+      .pipe(finalize(() => this.isSubmitting.set(false)), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
           this.successMessage.set(res.message || 'Code resent');

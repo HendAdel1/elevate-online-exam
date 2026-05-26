@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, ElementRef, inject, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CircleHelp, Clock, LUCIDE_ICONS, LucideAngularModule, LucideIconProvider, MoveRight } from 'lucide-angular';
 import { ExamsService } from './services/exams.service';
@@ -21,6 +22,7 @@ import { OverflowDirective } from '../../../../shared/directives/overflow.direct
 export class Exams implements OnInit, AfterViewInit, OnDestroy {
   private readonly examsService = inject(ExamsService);
   private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly exams = signal<Exam[]>([]);
   readonly isLoading = signal(false);
@@ -85,6 +87,7 @@ export class Exams implements OnInit, AfterViewInit, OnDestroy {
         page: this.currentPage,
         limit: this.pageSize,
       })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
           this.exams.update((current) => [...current, ...response.payload.data]);

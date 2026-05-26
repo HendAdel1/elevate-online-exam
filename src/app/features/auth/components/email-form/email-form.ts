@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, signal } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -20,6 +21,7 @@ import { AuthError } from '../../../../shared/ui/auth-error/auth-error';
   styleUrl: './email-form.css',
 })
 export class EmailForm implements OnInit, AfterViewInit {
+  private readonly destroyRef = inject(DestroyRef);
 
   @ViewChild('emailInput') emailInput!: ElementRef;
 
@@ -37,16 +39,18 @@ export class EmailForm implements OnInit, AfterViewInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
     setBoolean(USER_INFO_ACCESS_STORAGE_KEY, false);
     setBoolean(CREATE_PASSWORD_ACCESS_STORAGE_KEY, false);
 
-    this.emailControl.valueChanges.subscribe(() => {
-      this.errorMessage.set('');
-    });
+    this.emailControl.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.errorMessage.set('');
+      });
   }
 
   ngAfterViewInit(): void {
@@ -86,9 +90,10 @@ export class EmailForm implements OnInit, AfterViewInit {
     setBoolean(USER_INFO_ACCESS_STORAGE_KEY, false);
     setBoolean(CREATE_PASSWORD_ACCESS_STORAGE_KEY, false);
 
-    this.authService.sendEmail({ email }).pipe(
-      finalize(() => this.isSubmitting.set(false))
-    ).subscribe({
+    this.authService
+      .sendEmail({ email })
+      .pipe(finalize(() => this.isSubmitting.set(false)), takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: () => {
         sessionStorage.setItem(VERIFY_EMAIL_STORAGE_KEY, email);
         this.successMessage.set('Verification code sent successfully.');

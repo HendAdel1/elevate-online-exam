@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, Input, Output, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   AlertTriangle,
   LUCIDE_ICONS,
@@ -28,6 +29,7 @@ export class DeleteAccountModal {
   private readonly accountProfile = inject(AccountProfileService);
   private readonly authState = inject(AuthState);
   private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
   @Input({ required: true }) open = false;
   @Output() readonly closed = new EventEmitter<void>();
@@ -46,7 +48,7 @@ export class DeleteAccountModal {
     this.errorMessage = '';
     this.accountProfile
       .deleteAccount()
-      .pipe(finalize(() => (this.deleting = false)))
+      .pipe(finalize(() => (this.deleting = false)), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.authState.logout();

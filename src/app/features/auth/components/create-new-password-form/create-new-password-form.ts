@@ -1,5 +1,6 @@
 import { passwordValidator, passwordMatchValidator } from './../../validators/password.validator';
-import { Component } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Eye, EyeOff, LUCIDE_ICONS, LucideAngularModule, LucideIconProvider } from 'lucide-angular';
 import { AuthButton } from '../../../../shared/ui/auth-button/auth-button';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
@@ -20,7 +21,8 @@ import { AuthError } from '../../../../shared/ui/auth-error/auth-error';
     useValue: new LucideIconProvider({ EyeOff, Eye }),
   }]
 })
-export class CreateNewPasswordForm {
+export class CreateNewPasswordForm implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
 
   form: FormGroup;
   errorMessage: string | null = null;
@@ -35,15 +37,21 @@ export class CreateNewPasswordForm {
     private route: ActivatedRoute,
     private router: Router
   ) {
-    this.form = this.fb.group({
-      password: ['', [Validators.required, passwordValidator()]],
-      confirmPassword: ['', Validators.required],
-    },
-      { validators: passwordMatchValidator() });
+    this.form = this.fb.group(
+      {
+        password: ['', [Validators.required, passwordValidator()]],
+        confirmPassword: ['', Validators.required],
+      },
+      { validators: passwordMatchValidator() },
+    );
+  }
 
-    this.route.queryParamMap.subscribe(params => {
-      this.token = params.get('token') ?? '';
-    });
+  ngOnInit(): void {
+    this.route.queryParamMap
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params) => {
+        this.token = params.get('token') ?? '';
+      });
   }
 
 
@@ -120,8 +128,9 @@ export class CreateNewPasswordForm {
     this.isSubmitting = true;
     this.errorMessage = null;
 
-    this.authService.resetPassword(payload)
-      .pipe(finalize(() => this.isSubmitting = false))
+    this.authService
+      .resetPassword(payload)
+      .pipe(finalize(() => (this.isSubmitting = false)), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           sessionStorage.removeItem('auth_forgot_password_email');

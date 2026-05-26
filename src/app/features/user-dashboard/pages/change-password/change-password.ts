@@ -86,7 +86,7 @@ export class ChangePassword implements OnInit {
 
     this.accountProfile
       .changePassword({ currentPassword, newPassword, confirmPassword })
-      .pipe(finalize(() => this.submitting.set(false)))
+      .pipe(finalize(() => this.submitting.set(false)), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
           this.form.reset();

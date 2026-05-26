@@ -1,4 +1,5 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, signal } from '@angular/core';
+import { Component, DestroyRef, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Eye, EyeOff, LUCIDE_ICONS, LucideAngularModule, LucideIconProvider } from 'lucide-angular';
 import { AuthButton } from '../../../../shared/ui/auth-button/auth-button';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
@@ -28,6 +29,8 @@ import {
       }]
 })
 export class CreatePasswordForm implements OnInit, OnDestroy {
+  private readonly destroyRef = inject(DestroyRef);
+
   @ViewChild('passwordInput') passwordInput!: ElementRef<HTMLInputElement>;
 
   registerForm: FormGroup;
@@ -157,7 +160,7 @@ export class CreatePasswordForm implements OnInit, OnDestroy {
 
     this.authService
       .register(payload)
-      .pipe(finalize(() => this.isSubmitting.set(false)))
+      .pipe(finalize(() => this.isSubmitting.set(false)), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
           if (res.message !== 'Registration successful') {

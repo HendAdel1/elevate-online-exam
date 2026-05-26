@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { AuthButton } from '../../../../shared/ui/auth-button/auth-button';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';import { AuthButton } from '../../../../shared/ui/auth-button/auth-button';
 import { CircleX, Eye, EyeOff, LUCIDE_ICONS, LucideAngularModule, LucideIconProvider } from 'lucide-angular';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -23,7 +23,8 @@ import { finalize } from 'rxjs';
     useValue: new LucideIconProvider({ EyeOff, Eye, CircleX }),
   }]
 })
-export class LoginForm {
+export class LoginForm implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
 
   loginForm: FormGroup;
   showPassword = false;
@@ -47,7 +48,9 @@ export class LoginForm {
   }
 
   ngOnInit() {
-    this.loginForm.valueChanges.subscribe(() => {
+    this.loginForm.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
       if (this.loginError) {
         this.loginError = null;
       }
@@ -70,7 +73,8 @@ export class LoginForm {
     this.isSubmitting = true;
     this.loginError = null;
 
-    this.authService.login(payload).pipe(finalize(() => this.isSubmitting = false))
+    this.authService.login(payload)
+      .pipe(finalize(() => (this.isSubmitting = false)), takeUntilDestroyed(this.destroyRef))
       .subscribe((res) => {
         if (!res.token || !res.user) {
           this.loginError = res.message || 'Login failed';

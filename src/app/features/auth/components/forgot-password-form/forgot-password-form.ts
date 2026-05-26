@@ -1,4 +1,5 @@
-import { Component, Output } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthButton } from '../../../../shared/ui/auth-button/auth-button';
 import { AuthInput } from '../../../../shared/ui/auth-input/auth-input';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -14,6 +15,7 @@ import { AuthError } from '../../../../shared/ui/auth-error/auth-error';
   styleUrl: './forgot-password-form.css',
 })
 export class ForgotPasswordForm {
+  private readonly destroyRef = inject(DestroyRef);
 
     
 form = new FormGroup({
@@ -46,8 +48,13 @@ get emailControl() {
     this.isSubmitting = true;
     this.errorMessage = null;
 
-    this.authService.forgotPassword({email, redirectUrl: `${window.location.origin}/auth/create-new-password`}).pipe(finalize(() => this.isSubmitting = false))
-    .subscribe((res) =>{
+    this.authService
+      .forgotPassword({
+        email,
+        redirectUrl: `${window.location.origin}/auth/create-new-password`,
+      })
+      .pipe(finalize(() => (this.isSubmitting = false)), takeUntilDestroyed(this.destroyRef))
+      .subscribe((res) => {
       sessionStorage.setItem('auth_forgot_password_email', email);
       this.router.navigate(['/auth/verify-email'], { state: {email} } )
 

@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   ElementRef,
   EventEmitter,
   Injector,
@@ -13,6 +14,7 @@ import {
   afterNextRender,
   inject,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LUCIDE_ICONS, LucideAngularModule, LucideIconProvider, X } from 'lucide-angular';
 import { finalize } from 'rxjs';
 import type { AccountUser } from '../../models/account-profile.models';
@@ -33,6 +35,7 @@ import { AccountProfileService } from '../../services/account-profile.service';
 export class VerifyEmailChangeOtpModal implements OnChanges, OnDestroy {
   private readonly accountProfile = inject(AccountProfileService);
   private readonly injector = inject(Injector);
+  private readonly destroyRef = inject(DestroyRef);
 
   @Input({ required: true }) open = false;
   @Input() pendingEmail = '';
@@ -124,7 +127,7 @@ export class VerifyEmailChangeOtpModal implements OnChanges, OnDestroy {
     this.submitting = true;
     this.accountProfile
       .confirmEmailChange({ code })
-      .pipe(finalize(() => (this.submitting = false)))
+      .pipe(finalize(() => (this.submitting = false)), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (user) => this.emailConfirmed.emit(user),
         error: () => {
@@ -142,7 +145,7 @@ export class VerifyEmailChangeOtpModal implements OnChanges, OnDestroy {
     this.submitting = true;
     this.accountProfile
       .requestEmailChange({ newEmail: email })
-      .pipe(finalize(() => (this.submitting = false)))
+      .pipe(finalize(() => (this.submitting = false)), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => this.startResendCooldown(60),
         error: () => {

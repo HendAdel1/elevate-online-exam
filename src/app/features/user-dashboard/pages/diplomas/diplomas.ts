@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   Component,
+  DestroyRef,
   ElementRef,
   inject,
   OnDestroy,
@@ -8,6 +9,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import {
   ChevronDown,
@@ -33,6 +35,7 @@ import { Diploma } from './models/diploma.interface';
 })
 export class Diplomas implements OnInit, AfterViewInit, OnDestroy {
   private readonly diplomasService = inject(DiplomasService);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly diplomas = signal<Diploma[]>([]);
   readonly isLoading = signal(false);
@@ -88,6 +91,7 @@ export class Diplomas implements OnInit, AfterViewInit, OnDestroy {
 
     this.diplomasService
       .getDiplomas({ page: this.currentPage, limit: this.pageSize })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
           this.diplomas.update((current) => [

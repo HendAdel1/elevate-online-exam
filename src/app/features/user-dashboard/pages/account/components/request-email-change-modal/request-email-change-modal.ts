@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   EventEmitter,
   Input,
   OnChanges,
@@ -7,6 +8,7 @@ import {
   SimpleChanges,
   inject,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormControl,
   FormGroup,
@@ -37,6 +39,7 @@ import { AccountProfileService } from '../../services/account-profile.service';
 })
 export class RequestEmailChangeModal implements OnChanges {
   private readonly accountProfile = inject(AccountProfileService);
+  private readonly destroyRef = inject(DestroyRef);
 
   @Input({ required: true }) open = false;
   @Input() initialEmail = '';
@@ -80,7 +83,7 @@ export class RequestEmailChangeModal implements OnChanges {
 
     this.accountProfile
       .requestEmailChange({ newEmail })
-      .pipe(finalize(() => (this.submitting = false)))
+      .pipe(finalize(() => (this.submitting = false)), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => this.emailRequestSuccess.emit(newEmail),
         error: () => {
