@@ -1,19 +1,18 @@
 import { Observable } from 'rxjs';
-import { AuthAdapter } from '../adapters/auth.adapter';
+import type {
+  ForgotPasswordResult,
+  LoginResultType,
+  RegisterResult,
+  ResetPasswordResult,
+  SendEmailResult,
+  VerifyEmailResult,
+} from '../models/auth-service-results.types';
 import { SendEmailRequest } from '../models/requests/send-email.request';
 import { LoginRequest } from '../models/requests/login.request';
 import { RegisterRequest } from '../models/requests/register.request';
 import { VerifyEmailRequest } from '../models/requests/verify-email.request';
 import { ForgotPasswordRequest } from '../models/requests/forgot-password.request';
 import { ResetPasswordRequest } from '../models/requests/reset-password.request';
-import { LoginResult } from '../models/responses/login-result.response';
-
-type SendEmailResult = ReturnType<typeof AuthAdapter.adaptSendEmail>;
-type LoginResultType = LoginResult;
-type RegisterResult = ReturnType<typeof AuthAdapter.adaptRegister>;
-type VerifyEmailResult = ReturnType<typeof AuthAdapter.adaptVerifyEmail>;
-type ForgotPasswordResult = ReturnType<typeof AuthAdapter.adaptForgotPassword>;
-type ResetPasswordResult = ReturnType<typeof AuthAdapter.adaptResetPassword>;
 
 export abstract class AuthService {
   abstract sendEmail(data: SendEmailRequest): Observable<SendEmailResult>;

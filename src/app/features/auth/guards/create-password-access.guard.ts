@@ -1,10 +1,11 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { getBoolean } from '../utils/storage.util';
-
-const VERIFY_EMAIL_STORAGE_KEY = 'auth_verify_email';
-const USER_INFO_ACCESS_STORAGE_KEY = 'auth_user_info_access';
-const CREATE_PASSWORD_ACCESS_STORAGE_KEY = 'auth_create_password_access';
+import {
+  CREATE_PASSWORD_ACCESS_STORAGE_KEY,
+  USER_INFO_ACCESS_STORAGE_KEY,
+  VERIFY_EMAIL_STORAGE_KEY,
+} from '../constants/registration-session.keys';
 
 export const createPasswordAccessGuard: CanActivateFn = () => {
   const router = inject(Router);

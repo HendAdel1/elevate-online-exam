@@ -3,13 +3,8 @@ import { Injectable, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { GetExamResponse, GetExamsResponse } from '../models/exam.interface';
+import type { GetExamsParams } from '../models/get-exams-params.interface';
 import { environment } from '../../../../../../environments/environment';
-
-export interface GetExamsParams {
-    diplomaId?: string;
-    page?: number;
-    limit?: number;
-}
 
 @Injectable({
     providedIn: 'root',

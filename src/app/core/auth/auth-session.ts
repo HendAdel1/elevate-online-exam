@@ -1,35 +1,10 @@
 import { UserRole } from '../../../../projects/auth/src/lib/enums/user-role';
-import { User } from '../../../../projects/auth/src/lib/models/responses/user.response';
+import type { User } from '../../../../projects/auth/src/lib/models/responses/user.response';
 import { AUTH_STORAGE_KEYS } from './auth-storage.keys';
+import type { AuthUser } from './auth-user.types';
+import { isUserRole, parseStoredUser, toAuthUser } from './auth-session.utils';
 
-export type AuthUser = Pick<
-  User,
-  'id' | 'firstName' | 'lastName' | 'email' | 'profilePhoto' | 'role'
->;
-
-const isUserRole = (value: unknown): value is UserRole => {
-  return value === UserRole.ADMIN || value === UserRole.USER;
-};
-
-const toAuthUser = (source: User | AuthUser): AuthUser => ({
-  id: source.id,
-  firstName: source.firstName,
-  lastName: source.lastName,
-  email: source.email,
-  profilePhoto: source.profilePhoto,
-  role: source.role,
-});
-
-const parseStoredUser = (raw: string | null): AuthUser | null => {
-  if (!raw) return null;
-  try {
-    const parsed = JSON.parse(raw) as Partial<AuthUser>;
-    if (!parsed?.email || !isUserRole(parsed.role)) return null;
-    return parsed as AuthUser;
-  } catch {
-    return null;
-  }
-};
+export type { AuthUser } from './auth-user.types';
 
 export const authSession = {
   getToken(): string | null {

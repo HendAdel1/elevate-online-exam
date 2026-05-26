@@ -3,11 +3,12 @@ import { AuthButton } from '../../../../shared/ui/auth-button/auth-button';
 import { Router, RouterModule } from '@angular/router';
 import { finalize } from 'rxjs';
 import { AuthService } from '../../../../../../projects/auth/src/lib/services/auth.service';
+import {
+  USER_INFO_ACCESS_STORAGE_KEY,
+  VERIFY_EMAIL_STORAGE_KEY,
+} from '../../constants/registration-session.keys';
 import { setBoolean } from '../../utils/storage.util';
 import { AuthError } from '../../../../shared/ui/auth-error/auth-error';
-
-const VERIFY_EMAIL_STORAGE_KEY = 'auth_verify_email';
-const USER_INFO_ACCESS_STORAGE_KEY = 'auth_user_info_access';
 
 @Component({
   selector: 'app-verify-otp-form',

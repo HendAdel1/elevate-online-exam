@@ -3,12 +3,8 @@ import { Injectable, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { GetDiplomaResponse, GetDiplomasResponse } from '../models/diploma.interface';
+import type { GetDiplomasParams } from '../models/get-diplomas-params.interface';
 import { environment } from '../../../../../../environments/environment';
-
-export interface GetDiplomasParams {
-    page?: number;
-    limit?: number;
-}
 
 @Injectable({
     providedIn: 'root',

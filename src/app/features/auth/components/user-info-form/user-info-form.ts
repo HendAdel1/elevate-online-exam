@@ -1,34 +1,15 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Iti } from 'intl-tel-input';
 import { NgxPhoneField } from 'ngx-phone-field';
-import { AuthButton } from "../../../../shared/ui/auth-button/auth-button";
+import { AuthButton } from '../../../../shared/ui/auth-button/auth-button';
+import {
+  CREATE_PASSWORD_ACCESS_STORAGE_KEY,
+  USER_INFO_STORAGE_KEY,
+} from '../../constants/registration-session.keys';
+import { phoneValidator } from '../../../../shared/forms/phone-validator';
+import type { PhoneValue } from '../../../../shared/forms/phone-field.types';
 import { setBoolean } from '../../utils/storage.util';
-
-const USER_INFO_STORAGE_KEY = 'auth_user_info';
-const CREATE_PASSWORD_ACCESS_STORAGE_KEY = 'auth_create_password_access';
-type PhoneValue = Iti | null;
-
-type InvalidPhoneError = {
-  message: string;
-};
-
-const phoneValidator = (control: AbstractControl<PhoneValue>): ValidationErrors | null => {
-  const phoneValue = control.value;
-
-  if (!phoneValue?.getNumber()) return { required: true };
-
-  if (!phoneValue.isValidNumber()) {
-    return {
-      invalidPhone: {
-        message: 'Invalid phone number.',
-      } satisfies InvalidPhoneError,
-    };
-  }
-
-  return null;
-};
 
 @Component({
   selector: 'app-user-info-form',

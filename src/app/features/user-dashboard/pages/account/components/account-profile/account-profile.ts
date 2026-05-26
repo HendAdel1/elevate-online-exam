@@ -9,14 +9,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  ValidationErrors,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import type { Iti } from 'intl-tel-input';
 import intlTelInput from 'intl-tel-input';
 import { LucideAngularModule, LucideIconProvider, LUCIDE_ICONS, PencilLine } from 'lucide-angular';
@@ -33,34 +26,9 @@ import { VerifyEmailChangeOtpModal } from '../verify-email-change-otp-modal/veri
 import type { AccountUser } from '../../models/account-profile.models';
 import { AccountProfileService } from '../../services/account-profile.service';
 import { toEgyptianMobileNational } from '../../utils/profile-phone-api';
-
-type ProfileBaseline = {
-  firstName: string;
-  lastName: string;
-  phone: string;
-};
-
-type PhoneValue = Iti | null;
-
-type InvalidPhoneError = {
-  message: string;
-};
-
-const phoneValidator = (control: AbstractControl<PhoneValue>): ValidationErrors | null => {
-  const phoneValue = control.value;
-
-  if (!phoneValue?.getNumber()) return { required: true };
-
-  if (!phoneValue.isValidNumber()) {
-    return {
-      invalidPhone: {
-        message: 'Invalid phone number.',
-      } satisfies InvalidPhoneError,
-    };
-  }
-
-  return null;
-};
+import type { ProfileBaseline } from '../../models/profile-baseline.types';
+import { phoneValidator } from '../../../../../../shared/forms/phone-validator';
+import type { PhoneValue } from '../../../../../../shared/forms/phone-field.types';
 
 @Component({
   selector: 'app-account-profile',

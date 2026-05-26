@@ -1,7 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-
-const VERIFY_EMAIL_STORAGE_KEY = 'auth_verify_email';
+import { VERIFY_EMAIL_STORAGE_KEY } from '../constants/registration-session.keys';
 
 export const verifyOtpAccessGuard: CanActivateFn = () => {
   const router = inject(Router);

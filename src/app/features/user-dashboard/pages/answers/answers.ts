@@ -14,9 +14,8 @@ import { switchMap } from 'rxjs/operators';
 import { Diploma } from '../diplomas/models/diploma.interface';
 import type { SubmissionAnalyticsItem } from '../submissions/models/submission-detail.models';
 import type { Submission } from '../submissions/models/submission-core.model';
+import type { AnswerBlock } from './models/answers.types';
 import { SubmissionsService } from '../submissions/services/submissions.service';
-
-type AnswerBlock = { kind: 'wrong' | 'correctOutline'; text: string };
 
 @Component({
   selector: 'app-answers',

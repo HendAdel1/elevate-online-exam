@@ -2,11 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
-export interface BreadcrumbItem {
-  label: string;
-  url: string;
-  clickable?: boolean;
-}
+import type { BreadcrumbItem } from './breadcrumb.types';
+
 @Component({
   selector: 'app-breadcrumb',
   imports: [CommonModule, RouterModule],

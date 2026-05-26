@@ -9,11 +9,12 @@ import { RegisterRequest } from '../../../../../../projects/auth/src/lib/models/
 import { setBoolean } from '../../utils/storage.util';
 import { passwordValidator, passwordMatchValidator } from '../../validators/password.validator';
 import { AuthError } from '../../../../shared/ui/auth-error/auth-error';
-
-const USER_INFO_STORAGE_KEY = 'auth_user_info';
-const VERIFY_EMAIL_STORAGE_KEY = 'auth_verify_email';
-const USER_INFO_ACCESS_STORAGE_KEY = 'auth_user_info_access';
-const CREATE_PASSWORD_ACCESS_STORAGE_KEY = 'auth_create_password_access';
+import {
+  CREATE_PASSWORD_ACCESS_STORAGE_KEY,
+  USER_INFO_ACCESS_STORAGE_KEY,
+  USER_INFO_STORAGE_KEY,
+  VERIFY_EMAIL_STORAGE_KEY,
+} from '../../constants/registration-session.keys';
 
 @Component({
   selector: 'app-create-password-form',
